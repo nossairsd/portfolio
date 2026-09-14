@@ -1,0 +1,391 @@
+{
+  "meta": {
+    "title": "Nossair Sedki · Full-Stack Software Engineer",
+    "description": "Computer Engineering graduate (MSc equivalent). I design and build full-stack business applications, from REST APIs to production on Azure.",
+    "caseStudyTitle": "Meta Ads Report Studio · Case study",
+    "caseStudyDescription": "How I designed an advertising reporting platform that turns hours of manual work into a one-click client report."
+  },
+  "nav": {
+    "about": "Profile",
+    "process": "Process",
+    "experience": "Experience",
+    "projects": "Projects",
+    "stack": "Stack",
+    "contact": "Contact",
+    "cv": "Resume",
+    "menu": "Open menu",
+    "close": "Close menu",
+    "skip": "Skip to content",
+    "language": "Language",
+    "home": "Home",
+    "search": "Search",
+    "available": "Available"
+  },
+  "command": {
+    "placeholder": "Jump to a section, copy my email, download my resume…",
+    "empty": "No results.",
+    "navigate": "Navigate",
+    "actions": "Actions",
+    "links": "Links",
+    "copyEmail": "Copy email address",
+    "cvFr": "Download the French resume",
+    "cvEn": "Download the English resume",
+    "github": "Open my GitHub",
+    "demo": "Open the Meta Ads Report Studio demo",
+    "caseStudy": "Read the Meta Ads Report Studio case study",
+    "switchLocale": "Passer en français",
+    "copied": "Email address copied to clipboard",
+    "hint": "to navigate",
+    "open": "to open"
+  },
+  "hero": {
+    "availability": "Available · Open to relocation & remote",
+    "role": "Full-Stack Software Engineer",
+    "headlineLead": "I build business applications,",
+    "headlineQuiet": "from API to production.",
+    "intro": "Computer Engineering graduate (MSc equivalent). At Groupe Kohler I build REST APIs, integrate SAP and Microsoft Graph, and embed conversational AI into Teams. All of it containerised, tested and deployed on Azure.",
+    "ctaProjects": "See projects",
+    "ctaCv": "Download resume",
+    "currentLabel": "Currently",
+    "currentValue": "Software Engineer at Kohler Co.",
+    "chipMonths": "months at Kohler Co.",
+    "chipTests": "automated tests",
+    "chipCloud": "Running on Azure",
+    "portraitAlt": "Portrait of Nossair Sedki, Software Engineer",
+    "scroll": "Scroll"
+  },
+  "proof": {
+    "label": "Experience and education",
+    "orgs": ["Kohler Co.", "Jacob Delafon", "Lydec", "ENSA Tétouan"],
+    "months": "months of engineering at Kohler Co.",
+    "processing": "processing time on a digitised audit process",
+    "errors": "human error on that same process",
+    "tests": "automated tests on Meta Ads Report Studio"
+  },
+  "about": {
+    "eyebrow": "Profile",
+    "titleLead": "A full-stack engineer",
+    "titleQuiet": "who ships to production.",
+    "bio": "I work where software meets the business: understand a process, model it, then ship a reliable application that teams actually use.",
+    "currentLabel": "Current role",
+    "currentRole": "Software Engineer",
+    "currentCompany": "Jacob Delafon, Kohler Co.",
+    "currentSince": "Since October 2025",
+    "locationLabel": "Based in",
+    "city": "Tangier, Morocco",
+    "mobility": "Open to relocation & remote",
+    "localTime": "Local time",
+    "languagesLabel": "Languages",
+    "languages": [
+      { "name": "Arabic", "level": "Native", "value": 5 },
+      { "name": "French", "level": "Advanced", "value": 4 },
+      { "name": "English", "level": "Professional", "value": 4 }
+    ],
+    "degreeLabel": "Education",
+    "degreeTitle": "State Engineer's Degree in Computer Engineering",
+    "degreeDetail": "ENSA Tétouan · Highest honours",
+    "focusLabel": "Focus",
+    "focus": [
+      { "title": "Full-stack applications", "text": "React and Next.js, REST APIs in Node.js or Spring Boot, PostgreSQL and SQL Server." },
+      { "title": "Cloud & DevOps", "text": "Docker, Microsoft Azure, GitHub Actions pipelines and Playwright E2E tests." },
+      { "title": "Integration & AI", "text": "SAP, Microsoft Graph and Copilot Studio assistants embedded in Teams." }
+    ],
+    "strengthsLabel": "How I work",
+    "strengths": [
+      { "title": "Ownership", "text": "Take a feature from requirements analysis all the way to production." },
+      { "title": "Rigour", "text": "Analytical mindset, attention to detail, automated tests as a safety net." },
+      { "title": "Collaboration", "text": "Clear communication in Agile teams, code reviews included." },
+      { "title": "Adaptability", "text": "Fast ramp-up on new environments and new stacks." }
+    ]
+  },
+  "process": {
+    "eyebrow": "Process",
+    "titleLead": "From requirement",
+    "titleQuiet": "to production.",
+    "intro": "What I do every day at Kohler Co., step by step. Scroll to follow a feature all the way to release.",
+    "stepLabel": "Step",
+    "steps": [
+      {
+        "title": "Understand the need",
+        "text": "Sessions with business teams, analysis of the current process, and clear acceptance criteria before the first line of code.",
+        "tools": ["Jira", "Agile / Scrum", "Definition of Done"]
+      },
+      {
+        "title": "Design the solution",
+        "text": "Application architecture, data model and service boundaries, guided by Clean Architecture and SOLID principles.",
+        "tools": ["Clean Architecture", "SOLID", "PostgreSQL"]
+      },
+      {
+        "title": "Build the API and the interface",
+        "text": "REST APIs in Node.js / Express or Spring Boot, React and Next.js interfaces, SAP and Microsoft Graph integrations.",
+        "tools": ["TypeScript", "Spring Boot", "React", "SAP"]
+      },
+      {
+        "title": "Test",
+        "text": "Unit tests, integration tests and Playwright E2E tests on critical journeys. Quality is checked on every change.",
+        "tools": ["Playwright", "JUnit 5", "Vitest"]
+      },
+      {
+        "title": "Integrate continuously",
+        "text": "GitHub Actions pipelines: lint, type-check, tests and build, then a Docker image ready to deploy.",
+        "tools": ["GitHub Actions", "Docker"]
+      },
+      {
+        "title": "Ship to production",
+        "text": "Deployment on Microsoft Azure, monitoring, caching and structured error handling so it keeps running.",
+        "tools": ["Azure", "Monitoring", "Caching"]
+      }
+    ]
+  },
+  "experience": {
+    "eyebrow": "Experience",
+    "titleLead": "Professional",
+    "titleQuiet": "experience.",
+    "intro": "Applications shipped in industrial environments since 2024, from internship to engineering role.",
+    "current": "Current",
+    "scope": "Scope",
+    "show": "Show responsibilities",
+    "hide": "Hide responsibilities",
+    "monthsUnit": "{count, plural, one {# month} other {# months}}",
+    "items": [
+      {
+        "id": "kohler",
+        "role": "Software Engineer",
+        "company": "Jacob Delafon, Kohler Co.",
+        "place": "Tangier, Morocco",
+        "period": "Oct 2025 · Present",
+        "scope": "Design and development of internal business applications and digital services, from requirements analysis to production release.",
+        "highlights": ["SAP & Microsoft Graph integrations", "Conversational AI in Teams", "CI/CD and E2E testing"],
+        "points": [
+          "Analyse business needs, design the solutions and build the full-stack applications that support them.",
+          "Design REST APIs and backend services; define the application architecture and engineering best practices.",
+          "Integrate Group systems (SAP, Microsoft Graph) and embed conversational AI into Microsoft Teams.",
+          "Build and containerise (Docker) cloud-ready solutions deployed on Microsoft Azure.",
+          "Optimise performance: caching, monitoring and structured error handling.",
+          "Deploy continuously through GitHub Actions and harden quality with Playwright E2E tests (POM)."
+        ],
+        "stack": ["Node.js", "TypeScript", "Express", "React", "Next.js", "PostgreSQL", "Azure", "Docker", "GitHub Actions", "Playwright", "SAP"]
+      },
+      {
+        "id": "pfe",
+        "role": "Software Engineer, final-year internship",
+        "company": "Jacob Delafon, Kohler Co.",
+        "place": "Tangier, Morocco",
+        "period": "Feb · Jul 2025",
+        "duration": "6 months",
+        "scope": "Design and build of a microservices web application orchestrating the complete audit lifecycle.",
+        "highlights": ["−65% processing time", "−80% human error", "Microservices + RabbitMQ"],
+        "points": [
+          "Build the React front end and the Spring Boot / Spring Cloud microservices with RabbitMQ asynchronous messaging.",
+          "Secure the APIs (JWT, Spring Security) and deploy to Azure (SQL Server) with Docker.",
+          "Define the test strategy (JUnit 5, Mockito, cross-service integration tests) and automate build, test and deployment.",
+          "Digitise a process previously run in Excel: −65% processing time and −80% human error."
+        ],
+        "stack": ["React", "Spring Boot", "Spring Cloud", "RabbitMQ", "Docker", "Azure", "JUnit 5", "Mockito", "JWT"]
+      },
+      {
+        "id": "lydec",
+        "role": "Software Engineer, summer internship",
+        "company": "Lydec",
+        "place": "Casablanca, Morocco",
+        "period": "Jul · Sep 2024",
+        "duration": "3 months",
+        "scope": "Full-stack HSE mobile application for real-time incident and alert management in an industrial environment.",
+        "highlights": ["React Native mobile", "Real-time data flows", "Secured APIs"],
+        "points": [
+          "Build the React Native mobile app and the Spring Boot backend with asynchronous processing.",
+          "Architect secure REST APIs (JWT, Spring Security) and harden real-time data flows.",
+          "Implement automated tests (JUnit, Mockito) and the CI/CD pipeline; validate on physical devices and emulators."
+        ],
+        "stack": ["React Native", "Spring Boot", "JWT", "Spring Security", "GitHub Actions", "Docker", "JUnit"]
+      }
+    ]
+  },
+  "projects": {
+    "eyebrow": "Projects",
+    "titleLead": "Projects that solve",
+    "titleQuiet": "a real problem.",
+    "featured": "Featured project",
+    "metaAds": {
+      "name": "Meta Ads Report Studio",
+      "tagline": "Advertising reporting platform",
+      "year": "2026",
+      "summary": "A web application for marketing agencies running several Meta ad accounts: a consolidated dashboard, alerts, and a one-click PDF client report.",
+      "chapters": [
+        { "title": "The whole agency on one screen", "text": "Spend, trends, conversions and alerts for every client. The ones that need attention come first." },
+        { "title": "Every client in detail", "text": "KPIs, CTR, CPC, CPM and CPA ratios, the daily trend and each campaign's real status." },
+        { "title": "Shipped like a real product", "text": "OAuth 2.0, tokens encrypted with AES-256-GCM, 265 tests, GitHub Actions CI and a Docker image." }
+      ],
+      "stack": ["Next.js", "React", "TypeScript", "PostgreSQL", "Prisma", "Docker", "GitHub Actions", "Vitest"],
+      "demo": "Live demo",
+      "code": "Source code",
+      "caseStudy": "Read the case study",
+      "shotOverview": "Agency overview in Meta Ads Report Studio",
+      "shotClient": "Client page in Meta Ads Report Studio"
+    },
+    "othersTitle": "More work",
+    "confidential": "Confidential code",
+    "result": "Outcome",
+    "others": [
+      {
+        "id": "audit",
+        "name": "Audit microservices platform",
+        "context": "Kohler Co. · 2025",
+        "summary": "Orchestrates the complete audit lifecycle, a process previously run in Excel.",
+        "result": "−65% processing time · −80% errors",
+        "stack": ["React", "Spring Cloud", "RabbitMQ", "Azure"],
+        "confidential": true
+      },
+      {
+        "id": "hse",
+        "name": "HSE mobile application",
+        "context": "Lydec · 2024",
+        "summary": "Real-time management of safety incidents and alerts in an industrial environment.",
+        "result": "Validated on physical devices and emulators",
+        "stack": ["React Native", "Spring Boot", "JWT", "Docker"],
+        "confidential": true
+      },
+      {
+        "id": "urban",
+        "name": "Urban Services Platform",
+        "context": "Full-stack project",
+        "summary": "Centralises complaints, bookings and the management of sports facilities.",
+        "result": "+30% operational efficiency",
+        "stack": ["Spring Boot", "React", "PostgreSQL", "JWT"],
+        "confidential": false
+      }
+    ]
+  },
+  "stack": {
+    "eyebrow": "Stack",
+    "titleLead": "My stack,",
+    "titleQuiet": "layer by layer.",
+    "intro": "The tools I use, arranged the way a real system is. Scroll to take it apart.",
+    "layers": [
+      { "name": "Interface", "items": ["React", "Next.js", "Tailwind CSS", "React Native"] },
+      { "name": "APIs & services", "items": ["Node.js", "Express", "Spring Boot", "Spring Cloud"] },
+      { "name": "Data & messaging", "items": ["PostgreSQL", "SQL Server", "Prisma", "RabbitMQ"] },
+      { "name": "Cloud & DevOps", "items": ["Azure", "Docker", "GitHub Actions", "Linux"] }
+    ],
+    "transversalTitle": "Across every layer",
+    "transversal": [
+      { "name": "Languages", "items": ["TypeScript", "JavaScript", "Java", "Python", "SQL"] },
+      { "name": "Testing & quality", "items": ["JUnit 5", "Mockito", "Vitest", "Playwright", "Supertest", "TDD"] },
+      { "name": "Security", "items": ["JWT", "OAuth 2.0", "Spring Security"] },
+      { "name": "Integration & AI", "items": ["Microsoft Graph", "Copilot Studio", "SAP"] },
+      { "name": "Architecture & methods", "items": ["Clean Architecture", "SOLID", "Design patterns", "Agile / Scrum", "Code reviews"] }
+    ]
+  },
+  "education": {
+    "eyebrow": "Education",
+    "titleLead": "Education",
+    "titleQuiet": "& certifications.",
+    "degreesTitle": "Degrees",
+    "degrees": [
+      {
+        "title": "State Engineer's Degree in Computer Engineering",
+        "detail": "5-year programme, MSc equivalent",
+        "school": "École Nationale des Sciences Appliquées, Tétouan",
+        "period": "2020 · 2025",
+        "honours": "Highest honours"
+      },
+      {
+        "title": "High School Diploma, Physical Sciences",
+        "detail": "French option",
+        "school": "Lycée El Kindi, Casablanca",
+        "period": "2020",
+        "honours": "Highest honours"
+      }
+    ],
+    "certificationsTitle": "Certifications",
+    "certifications": [
+      { "title": "Azure Fundamentals (AZ-900)", "issuer": "Microsoft", "status": "In progress" },
+      { "title": "Building Scalable Java Microservices with Spring Boot and Spring Cloud", "issuer": "Coursera" },
+      { "title": "Clean Architecture: Designing testable code", "issuer": "Udemy" },
+      { "title": "Scrum", "issuer": "Udemy" }
+    ]
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "titleLead": "Let's work",
+    "titleQuiet": "together.",
+    "text": "I'm open to full-stack Software Engineer roles, on-site with relocation or remote. Drop me a line and I'll reply quickly.",
+    "globeCaption": "Based in Tangier, open to relocation across Europe",
+    "cities": {
+      "tangier": "Tangier",
+      "paris": "Paris",
+      "lyon": "Lyon",
+      "brussels": "Brussels",
+      "geneva": "Geneva",
+      "luxembourg": "Luxembourg",
+      "amsterdam": "Amsterdam"
+    },
+    "emailLabel": "Email",
+    "write": "Email me",
+    "copy": "Copy",
+    "copied": "Email address copied to clipboard",
+    "github": "GitHub",
+    "cvFr": "French resume",
+    "cvEn": "English resume",
+    "location": "Tangier, Morocco"
+  },
+  "footer": {
+    "tagline": "Full-Stack Software Engineer. Business applications, from API to production.",
+    "credit": "Designed and built by Nossair Sedki.",
+    "top": "Back to top",
+    "sections": "Sections",
+    "elsewhere": "Elsewhere",
+    "localTime": "Tangier"
+  },
+  "caseStudy": {
+    "back": "All projects",
+    "eyebrow": "Case study",
+    "leadLead": "Hours of manual reporting,",
+    "leadQuiet": "replaced by a one-click report.",
+    "facts": {
+      "year": "Year",
+      "role": "Role",
+      "roleValue": "Design, development, deployment",
+      "type": "Type",
+      "typeValue": "Personal project, in production",
+      "stack": "Stack"
+    },
+    "problemTitle": "The problem",
+    "problem": "An agency managing several clients on Meta Ads spends hours every week copying figures into Excel, account by account, to produce its reports. And the real problems show up too late: a budget running away, a blocked account, conversions that stop.",
+    "solutionTitle": "The solution",
+    "solution": "Meta Ads Report Studio connects the agency's ad accounts, groups them by client and shows on one screen who is spending, how well, and who needs attention.",
+    "features": [
+      { "title": "Agency overview", "text": "Every client on one screen: spend and its change, daily trend, conversions, cost per conversion. Clients that need attention come first." },
+      { "title": "Alerts that matter", "text": "Spend up 40% or more, cost per conversion up 30% or more, a week with no conversions, an account blocked by payment or review." },
+      { "title": "Client page", "text": "KPIs, ratios (CTR, CPC, CPM, CPA), the trend, and a campaign table showing each campaign's real status." },
+      { "title": "One-click PDF report", "text": "A one-page A4 report under the agency's name, rebuilt on the server from source data, never from figures the browser sends." }
+    ],
+    "architectureTitle": "Architecture",
+    "architecture": "Next.js 16 (App Router, Server Components, Server Actions), PostgreSQL on Neon with Prisma, Meta Marketing API v21. Amounts are held as integer cents and the browser receives 180 days of rows once: switching between 7, 30 and 90 days is instant, and every period has a previous one to compare against.",
+    "layers": [
+      { "name": "Interface", "items": ["Next.js 16", "React 19", "Tailwind CSS 4", "Motion", "Recharts"] },
+      { "name": "Server", "items": ["Server Components", "Server Actions", "Auth.js", "zod", "@react-pdf"] },
+      { "name": "Data", "items": ["PostgreSQL (Neon)", "Prisma 7", "10-min in-memory cache"] },
+      { "name": "External", "items": ["Meta Marketing API v21", "Facebook Login for Business"] }
+    ],
+    "securityTitle": "Security & privacy",
+    "security": [
+      "Least privilege: only public_profile and ads_read are requested. The app can neither edit a campaign nor spend money.",
+      "Tokens encrypted at rest with AES-256-GCM, sent in an Authorization header and never in a URL.",
+      "Every identifier coming from the browser is checked against the signed-in user's own data.",
+      "No statistics stored: figures are fetched on demand and cached in memory for ten minutes at most.",
+      "Rate limiting on the PDF endpoint and bounded concurrency to stay within Meta's API quota."
+    ],
+    "qualityTitle": "Quality & delivery",
+    "quality": "Every pull request runs lint, type-check, the Vitest and Testing Library suite, then a production build. The Docker image is then built, started and probed over HTTP.",
+    "metrics": [
+      { "value": "265", "label": "automated tests" },
+      { "value": "2", "label": "languages, PDF included" },
+      { "value": "1 click", "label": "for a client report" },
+      { "value": "375 px", "label": "responsive from mobile up" }
+    ],
+    "ctaTitle": "Try the demo",
+    "ctaText": "A fictitious agency with six clients, no account or setup needed.",
+    "next": "Back to home"
+  }
+}
