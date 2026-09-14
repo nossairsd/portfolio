@@ -4,6 +4,7 @@ import { Environment, Lightformer, PerspectiveCamera, RoundedBox, View, useTextu
 import { useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useRef } from "react";
 import * as THREE from "three";
+import { SceneBoundary } from "./scene-boundary";
 import type { Progress } from "@/lib/use-scroll-progress";
 import { BlobShadow, damp } from "./shared";
 
@@ -141,7 +142,9 @@ function Scene({ progress }: { progress: Progress }) {
 export default function LaptopView({ progress, className }: { progress: Progress; className?: string }) {
   return (
     <View className={className}>
-      <Scene progress={progress} />
+      <SceneBoundary>
+        <Scene progress={progress} />
+      </SceneBoundary>
     </View>
   );
 }

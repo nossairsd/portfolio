@@ -19,7 +19,9 @@
     "language": "Language",
     "home": "Home",
     "search": "Search",
-    "available": "Available"
+    "available": "Available",
+    "contactCta": "Get in touch",
+    "menuStatus": "Available for new opportunities"
   },
   "command": {
     "placeholder": "Jump to a section, copy my email, download my resume…",
@@ -39,19 +41,35 @@
     "open": "to open"
   },
   "hero": {
-    "availability": "Available · Open to relocation & remote",
+    "status": "Available",
+    "mobility": "Open to relocation & remote",
     "role": "Full-Stack Software Engineer",
+    "rolePrefix": "Software Engineer",
+    "roles": ["Full-Stack", "APIs & Backend", "Cloud Azure", "Applied AI"],
     "headlineLead": "I build business applications,",
     "headlineQuiet": "from API to production.",
-    "intro": "Computer Engineering graduate (MSc equivalent). At Groupe Kohler I build REST APIs, integrate SAP and Microsoft Graph, and embed conversational AI into Teams. All of it containerised, tested and deployed on Azure.",
+    "intro": "Computer Engineering graduate (MSc equivalent). At Kohler Co. I build REST APIs, integrate SAP and Microsoft Graph, and embed conversational AI into Teams, all the way to production on Azure.",
     "ctaProjects": "See projects",
     "ctaCv": "Download resume",
+    "copyEmail": "Copy email",
+    "copied": "Email address copied to clipboard",
     "currentLabel": "Currently",
     "currentValue": "Software Engineer at Kohler Co.",
-    "chipMonths": "months at Kohler Co.",
-    "chipTests": "automated tests",
-    "chipCloud": "Running on Azure",
     "portraitAlt": "Portrait of Nossair Sedki, Software Engineer",
+    "localTime": "Tangier, Morocco",
+    "terminal": {
+      "title": "deploy · kohler-co/app",
+      "command": "git push origin main",
+      "lint": "lint & type-check",
+      "tests": "265 tests",
+      "build": "docker image",
+      "deploy": "azure deploy",
+      "passed": "passed",
+      "live": "live",
+      "role": "Software Engineer",
+      "company": "Kohler Co.",
+      "months": "{count} months"
+    },
     "scroll": "Scroll"
   },
   "proof": {

@@ -54,7 +54,7 @@ export default async function OpengraphImage({ params }: { params: Promise<{ loc
             }}
           >
             <div style={{ width: 12, height: 12, borderRadius: 999, background: "#16a34a" }} />
-            {t("availability")}
+            {t("status")} · {t("mobility")}
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ fontSize: 24, letterSpacing: 3, color: "#64748b", textTransform: "uppercase" }}>{t("role")}</div>

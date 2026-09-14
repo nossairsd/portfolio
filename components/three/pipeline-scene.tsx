@@ -4,6 +4,7 @@ import { Edges, OrthographicCamera, RoundedBox, View } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
+import { SceneBoundary } from "./scene-boundary";
 import type { Progress } from "@/lib/use-scroll-progress";
 import { BLUE, BLUE_SOFT, BlobShadow, GREEN, SLATE, StudioLights, WHITE, damp } from "./shared";
 import { makeLabel } from "./textures";
@@ -318,7 +319,9 @@ function Scene({ progress }: { progress: Progress }) {
 export default function PipelineView({ progress, className }: { progress: Progress; className?: string }) {
   return (
     <View className={className}>
-      <Scene progress={progress} />
+      <SceneBoundary>
+        <Scene progress={progress} />
+      </SceneBoundary>
     </View>
   );
 }

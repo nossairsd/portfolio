@@ -19,7 +19,9 @@
     "language": "Langue",
     "home": "Accueil",
     "search": "Rechercher",
-    "available": "Disponible"
+    "available": "Disponible",
+    "contactCta": "Me contacter",
+    "menuStatus": "Disponible pour de nouvelles opportunités"
   },
   "command": {
     "placeholder": "Aller à une section, copier l'email, télécharger le CV…",
@@ -39,19 +41,35 @@
     "open": "pour ouvrir"
   },
   "hero": {
-    "availability": "Disponible · Mobilité France & Europe",
+    "status": "Disponible",
+    "mobility": "Mobilité France & Europe",
     "role": "Software Engineer Full-Stack",
+    "rolePrefix": "Software Engineer",
+    "roles": ["Full-Stack", "APIs & Backend", "Cloud Azure", "IA intégrée"],
     "headlineLead": "Je conçois des applications métier,",
     "headlineQuiet": "de l'API à la production.",
-    "intro": "Ingénieur d'État en génie informatique. Chez Groupe Kohler, je développe des APIs REST, j'intègre SAP et Microsoft Graph et j'embarque de l'IA conversationnelle dans Teams. Le tout conteneurisé, testé et déployé sur Azure.",
+    "intro": "Ingénieur d'État en génie informatique. Chez Groupe Kohler, je développe des APIs REST, j'intègre SAP et Microsoft Graph et j'embarque de l'IA conversationnelle dans Teams, jusqu'à la mise en production sur Azure.",
     "ctaProjects": "Voir les projets",
     "ctaCv": "Télécharger le CV",
+    "copyEmail": "Copier l'email",
+    "copied": "Adresse copiée dans le presse-papiers",
     "currentLabel": "Actuellement",
     "currentValue": "Software Engineer chez Groupe Kohler",
-    "chipMonths": "mois chez Groupe Kohler",
-    "chipTests": "tests automatisés",
-    "chipCloud": "En production sur Azure",
     "portraitAlt": "Portrait de Nossair Sedki, Software Engineer",
+    "localTime": "Tanger, Maroc",
+    "terminal": {
+      "title": "deploy · groupe-kohler/app",
+      "command": "git push origin main",
+      "lint": "lint & typage",
+      "tests": "265 tests",
+      "build": "image docker",
+      "deploy": "déploiement azure",
+      "passed": "réussi",
+      "live": "en ligne",
+      "role": "Software Engineer",
+      "company": "Groupe Kohler",
+      "months": "{count} mois"
+    },
     "scroll": "Défiler"
   },
   "proof": {

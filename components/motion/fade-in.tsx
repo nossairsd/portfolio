@@ -7,7 +7,7 @@ export const EASE_OUT = [0.16, 1, 0.3, 1] as const;
 type FadeInProps = HTMLMotionProps<"div"> & {
   delay?: number;
   y?: number;
-  as?: "div" | "li" | "article" | "section" | "p";
+  as?: "div" | "li" | "article" | "section" | "p" | "span";
 };
 
 /** Rise and fade in once, when the element scrolls into view. */

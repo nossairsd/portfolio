@@ -1,22 +1,141 @@
 "use client";
 
-import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring } from "motion/react";
-import { ArrowDownToLine, Menu, Search, X } from "lucide-react";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useMotionValueEvent,
+  useScroll,
+  useSpring,
+  type MotionValue,
+} from "motion/react";
+import { ArrowDownToLine, ArrowRight, ArrowUpRight, Search } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, useTransition } from "react";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import { ButtonLink } from "@/components/ui/button";
+import { LogoMark } from "@/components/ui/logo";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/cn";
 import { OPEN_COMMAND_EVENT } from "./command-menu";
 
 const SECTIONS = ["about", "process", "experience", "projects", "stack", "contact"] as const;
+type SectionId = (typeof SECTIONS)[number];
 
-const itemIn = {
-  hidden: { opacity: 0, y: -8 },
-  show: (i: number) => ({ opacity: 1, y: 0, transition: { delay: 0.1 + i * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] as const } }),
-};
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+const noop = () => () => {};
+function useShortcutLabel() {
+  return useSyncExternalStore(
+    noop,
+    () => (/Mac|iPhone|iPad/.test(navigator.platform) ? "⌘K" : "Ctrl K"),
+    () => "Ctrl K",
+  );
+}
+
+/**
+ * Which section sits under the middle of the viewport, and how far through it
+ * the reader is. Progress lives in a motion value so the bar under the active
+ * link moves every frame without re-rendering the navbar.
+ */
+function useSectionProgress(enabled: boolean) {
+  const [active, setActive] = useState<SectionId | null>(null);
+  const progress = useMotionValue(0);
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, "change", () => {
+    if (!enabled) return;
+    const middle = window.innerHeight * 0.5;
+    let current: SectionId | null = null;
+    for (const id of SECTIONS) {
+      const rect = document.getElementById(id)?.getBoundingClientRect();
+      if (rect && rect.top <= middle && rect.bottom >= middle) {
+        current = id;
+        progress.set(Math.min(1, Math.max(0, (middle - rect.top) / rect.height)));
+        break;
+      }
+    }
+    setActive((previous) => (previous === current ? previous : current));
+  });
+
+  return { active, progress };
+}
+
+function NavLink({
+  id,
+  label,
+  href,
+  active,
+  hovered,
+  progress,
+  onHover,
+}: {
+  id: SectionId;
+  label: string;
+  href: string;
+  active: boolean;
+  hovered: boolean;
+  progress: MotionValue<number>;
+  onHover: (id: SectionId) => void;
+}) {
+  const smooth = useSpring(progress, { stiffness: 200, damping: 30 });
+  return (
+    <li className="relative" onMouseEnter={() => onHover(id)}>
+      {hovered ? (
+        <motion.span
+          layoutId="nav-hover"
+          className="absolute inset-0 rounded-full bg-fg/[0.05]"
+          transition={{ type: "spring", stiffness: 420, damping: 36 }}
+        />
+      ) : null}
+      <a
+        href={href}
+        aria-current={active ? "location" : undefined}
+        className={cn(
+          "relative flex h-9 items-center rounded-full px-3.5 text-[0.8125rem] font-medium transition-colors duration-300",
+          active ? "text-fg" : "text-fg/55 hover:text-fg",
+        )}
+      >
+        {label}
+        {active ? (
+          <motion.span
+            layoutId="nav-active-track"
+            className="absolute inset-x-3.5 bottom-1 h-[2px] overflow-hidden rounded-full bg-primary/15"
+            transition={{ type: "spring", stiffness: 380, damping: 34 }}
+          >
+            <motion.span style={{ scaleX: smooth }} className="block h-full origin-left rounded-full bg-primary" />
+          </motion.span>
+        ) : null}
+      </a>
+    </li>
+  );
+}
+
+function MenuToggle({ open, onClick, label }: { open: boolean; onClick: () => void; label: string }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      aria-expanded={open}
+      className="relative grid size-10 place-items-center rounded-full bg-fg text-white xl:hidden"
+    >
+      <span className="relative block h-3 w-4">
+        <motion.span
+          className="absolute left-0 top-0 block h-[1.5px] w-full rounded-full bg-current"
+          animate={open ? { top: "50%", rotate: 45, y: "-50%" } : { top: "0%", rotate: 0, y: "0%" }}
+          transition={{ duration: 0.35, ease: EASE }}
+        />
+        <motion.span
+          className="absolute bottom-0 left-0 block h-[1.5px] rounded-full bg-current"
+          animate={open ? { bottom: "50%", rotate: -45, y: "50%", width: "100%" } : { bottom: "0%", rotate: 0, y: "0%", width: "65%" }}
+          transition={{ duration: 0.35, ease: EASE }}
+        />
+      </span>
+    </button>
+  );
+}
 
 export function Nav() {
   const t = useTranslations("nav");
@@ -24,39 +143,41 @@ export function Nav() {
   const pathname = usePathname();
   const router = useRouter();
   const [, startTransition] = useTransition();
-  const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [hovered, setHovered] = useState<string | null>(null);
-  const [active, setActive] = useState<string | null>(null);
+  const shortcut = useShortcutLabel();
   const onHome = pathname === "/";
 
-  const { scrollY, scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, restDelta: 0.001 });
-  useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 24));
+  const [open, setOpen] = useState(false);
+  const [hovered, setHovered] = useState<SectionId | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastY = useRef(0);
+  const { scrollY } = useScroll();
+  const { active, progress } = useSectionProgress(onHome);
 
-  // Scroll-spy: the section crossing the middle of the viewport is active.
+  // Compact once the page moves; slide away while reading down, come back on
+  // the first scroll up.
+  useMotionValueEvent(scrollY, "change", (y) => {
+    const delta = y - lastY.current;
+    lastY.current = y;
+    setScrolled(y > 24);
+    if (y < 480) setHidden(false);
+    else if (delta > 6) setHidden(true);
+    else if (delta < -6) setHidden(false);
+  });
+
   useEffect(() => {
-    if (!onHome) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) if (entry.isIntersecting) setActive(entry.target.id);
-      },
-      { rootMargin: "-45% 0px -50% 0px" },
-    );
-    for (const id of SECTIONS) {
-      const element = document.getElementById(id);
-      if (element) observer.observe(element);
-    }
-    return () => observer.disconnect();
-  }, [onHome]);
-
-  function switchLocale(next: Locale) {
-    if (next === locale) return;
-    startTransition(() => router.replace(pathname, { locale: next, scroll: false }));
-  }
+    document.documentElement.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.documentElement.style.overflow = "";
+    };
+  }, [open]);
 
   const href = (id: string) => (onHome ? `#${id}` : `/${locale}#${id}`);
   const openCommand = () => window.dispatchEvent(new Event(OPEN_COMMAND_EVENT));
+  const switchLocale = (next: Locale) => {
+    if (next === locale) return;
+    startTransition(() => router.replace(pathname, { locale: next, scroll: false }));
+  };
 
   return (
     <>
@@ -67,175 +188,168 @@ export function Nav() {
         {t("skip")}
       </a>
 
-      <div className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6">
-        <motion.nav
+      <motion.header
+        initial={{ y: -80, opacity: 0 }}
+        animate={{ y: hidden && !open ? -96 : 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: EASE }}
+        className="fixed inset-x-0 top-0 z-[60] px-3 pt-3 sm:px-5 sm:pt-4"
+      >
+        <nav
           aria-label="Primary"
-          initial={false}
-          animate={scrolled ? "scrolled" : "top"}
-          variants={{
-            top: {
-              maxWidth: 1152,
-              borderRadius: 20,
-              backgroundColor: "rgba(255,255,255,0)",
-              borderColor: "rgba(15,23,42,0)",
-              boxShadow: "0 0 0 rgba(15,23,42,0)",
-              paddingLeft: 8,
-              paddingRight: 8,
-            },
-            scrolled: {
-              maxWidth: 1000,
-              borderRadius: 999,
-              backgroundColor: "rgba(255,255,255,0.78)",
-              borderColor: "rgba(15,23,42,0.07)",
-              boxShadow: "0 12px 36px -12px rgba(15,23,42,0.18)",
-              paddingLeft: 10,
-              paddingRight: 8,
-            },
-          }}
-          transition={{ type: "spring", stiffness: 260, damping: 32 }}
           className={cn(
-            "relative mx-auto flex h-14 w-full items-center justify-between gap-3 overflow-hidden border",
-            scrolled && "backdrop-blur-xl backdrop-saturate-150",
+            "relative mx-auto flex h-14 items-center justify-between gap-3 rounded-full pl-2 pr-2 transition-[max-width,background-color,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+            "border backdrop-blur-xl backdrop-saturate-150",
+            scrolled || open
+              ? "max-w-[68rem] border-line bg-white/80 shadow-[0_1px_1px_rgb(15_23_42/0.04),0_14px_40px_-16px_rgb(15_23_42/0.25)]"
+              : "max-w-[72rem] border-white/60 bg-white/55 shadow-[0_1px_1px_rgb(15_23_42/0.03)]",
           )}
         >
-          <motion.div custom={0} variants={itemIn} initial="hidden" animate="show" className="shrink-0">
-            <Link href="/" aria-label={t("home")} className="group flex items-center gap-2.5 rounded-full">
-              <span className="relative grid size-9 place-items-center rounded-full bg-fg font-mono text-[0.6875rem] font-semibold tracking-tight text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.2)]">
-                NS
-                <span className="absolute -right-0.5 -top-0.5 size-2.5 rounded-full border-2 border-white bg-success" />
-              </span>
-              <span className="hidden flex-col leading-none sm:flex">
-                <span className="text-[0.9375rem] font-semibold tracking-tight">Nossair Sedki</span>
-                <span className="mt-1 text-[0.6875rem] text-muted">{t("available")}</span>
-              </span>
-            </Link>
-          </motion.div>
+          <Link href="/" aria-label={t("home")} className="group flex items-center gap-2.5 rounded-full pr-2">
+            <LogoMark className="transition-transform duration-500 group-hover:-rotate-6" />
+            <span className="text-[0.9375rem] font-semibold tracking-[-0.02em] text-fg">Nossair Sedki</span>
+          </Link>
 
-          <ul className="hidden items-center gap-0.5 lg:flex" onMouseLeave={() => setHovered(null)}>
-            {SECTIONS.map((id, i) => (
-              <motion.li
+          <ul className="hidden items-center xl:flex" onMouseLeave={() => setHovered(null)}>
+            {SECTIONS.map((id) => (
+              <NavLink
                 key={id}
-                custom={i + 1}
-                variants={itemIn}
-                initial="hidden"
-                animate="show"
-                onMouseEnter={() => setHovered(id)}
-                className="relative"
-              >
-                {hovered === id ? (
-                  <motion.span
-                    layoutId="nav-hover"
-                    className="absolute inset-0 rounded-full bg-fg/[0.05]"
-                    transition={{ type: "spring", stiffness: 400, damping: 34 }}
-                  />
-                ) : null}
-                <a
-                  href={href(id)}
-                  className={cn(
-                    "relative flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[0.8125rem] font-medium transition-colors",
-                    active === id ? "text-fg" : "text-fg/60 hover:text-fg",
-                  )}
-                >
-                  {active === id ? (
-                    <motion.span layoutId="nav-active" className="size-1.5 rounded-full bg-primary" />
-                  ) : null}
-                  {t(id)}
-                </a>
-              </motion.li>
+                id={id}
+                label={t(id)}
+                href={href(id)}
+                active={active === id}
+                hovered={hovered === id}
+                progress={progress}
+                onHover={setHovered}
+              />
             ))}
           </ul>
 
-          <motion.div custom={8} variants={itemIn} initial="hidden" animate="show" className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5">
             <button
               type="button"
               onClick={openCommand}
               aria-label={t("search")}
-              className="flex h-9 items-center gap-2 rounded-full px-2.5 text-fg/60 transition-colors hover:bg-fg/[0.05] hover:text-fg"
+              className="group hidden h-9 items-center gap-2 rounded-full bg-fg/[0.04] pl-3 pr-1.5 text-[0.8125rem] text-fg/50 ring-1 ring-inset ring-fg/[0.06] transition-colors hover:bg-fg/[0.07] hover:text-fg/80 md:flex"
             >
-              <Search aria-hidden className="size-4" />
-              <kbd className="hidden rounded-md border border-line bg-white px-1.5 py-0.5 font-mono text-[0.625rem] text-muted md:inline">
-                Ctrl K
+              <Search aria-hidden className="size-3.5" />
+              
+              <kbd className="rounded-full bg-white px-2 py-0.5 font-sans text-[0.6875rem] font-medium text-fg/60 shadow-[0_1px_2px_rgb(15_23_42/0.1)]">
+                {shortcut}
               </kbd>
             </button>
 
-            <div role="group" aria-label={t("language")} className="flex h-9 items-center rounded-full bg-fg/[0.05] p-1">
+            <div role="group" aria-label={t("language")} className="hidden h-9 items-center rounded-full bg-fg/[0.04] p-1 ring-1 ring-inset ring-fg/[0.06] sm:flex">
               {routing.locales.map((code) => (
                 <button
                   key={code}
                   type="button"
                   onClick={() => switchLocale(code)}
                   aria-pressed={code === locale}
-                  className="relative h-full rounded-full px-2.5 text-[0.6875rem] font-semibold uppercase"
+                  className="relative h-full rounded-full px-2.5 text-[0.6875rem] font-semibold uppercase tracking-wide"
                 >
                   {code === locale ? (
                     <motion.span
                       layoutId="locale-pill"
-                      className="absolute inset-0 rounded-full bg-white shadow-[0_1px_3px_rgb(15_23_42/0.14)]"
+                      className="absolute inset-0 rounded-full bg-white shadow-[0_1px_3px_rgb(15_23_42/0.16)]"
                       transition={{ type: "spring", stiffness: 420, damping: 34 }}
                     />
                   ) : null}
-                  <span className={cn("relative", code === locale ? "text-fg" : "text-fg/45")}>{code}</span>
+                  <span className={cn("relative transition-colors", code === locale ? "text-fg" : "text-fg/40")}>{code}</span>
                 </button>
               ))}
             </div>
 
-            <ButtonLink href={site.cv[locale]} download size="sm" className="hidden sm:inline-flex">
-              <ArrowDownToLine aria-hidden className="size-3.5" />
-              {t("cv")}
+            <ButtonLink href={href("contact")} size="sm" className="hidden pr-1.5 xl:inline-flex">
+              {t("contactCta")}
+              <span className="grid size-6 place-items-center rounded-full bg-white/20 transition-transform duration-300 group-hover/button:translate-x-0.5">
+                <ArrowRight aria-hidden className="size-3.5" />
+              </span>
             </ButtonLink>
 
-            <button
-              type="button"
-              onClick={() => setOpen((value) => !value)}
-              aria-label={open ? t("close") : t("menu")}
-              aria-expanded={open}
-              className="grid size-9 place-items-center rounded-full text-fg hover:bg-fg/[0.05] lg:hidden"
-            >
-              {open ? <X aria-hidden className="size-5" /> : <Menu aria-hidden className="size-5" />}
-            </button>
-          </motion.div>
+            <MenuToggle open={open} onClick={() => setOpen((value) => !value)} label={open ? t("close") : t("menu")} />
+          </div>
+        </nav>
+      </motion.header>
 
-          {/* Reading progress along the bottom edge of the island. */}
-          <motion.span
-            aria-hidden
-            style={{ scaleX: progress }}
-            className={cn(
-              "absolute inset-x-6 bottom-0 h-px origin-left bg-gradient-to-r from-primary/0 via-primary to-primary/0 transition-opacity duration-500",
-              scrolled ? "opacity-100" : "opacity-0",
-            )}
-          />
-        </motion.nav>
-
-        <AnimatePresence>
-          {open ? (
-            <motion.div
-              initial={{ opacity: 0, y: -8, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -8, scale: 0.98 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="card-surface mx-auto mt-2 max-w-[1000px] origin-top p-3 lg:hidden"
-            >
-              <nav aria-label="Mobile" className="grid grid-cols-2 gap-1">
-                {SECTIONS.map((id, i) => (
-                  <a
-                    key={id}
-                    href={href(id)}
-                    onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-[0.9375rem] font-medium text-fg-2 hover:bg-bg-muted"
-                  >
-                    <span className="font-mono text-[0.6875rem] text-primary">0{i + 1}</span>
-                    {t(id)}
-                  </a>
-                ))}
+      <AnimatePresence>
+        {open ? (
+          <motion.div
+            key="menu"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.3, delay: 0.1 } }}
+            className="fixed inset-0 z-[55] bg-white/85 backdrop-blur-2xl xl:hidden"
+          >
+            <div aria-hidden className="bg-dots absolute inset-0 [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
+            <div className="relative flex h-full flex-col px-5 pb-8 pt-24">
+              <nav aria-label="Mobile" className="flex-1">
+                <ul>
+                  {SECTIONS.map((id, i) => (
+                    <motion.li
+                      key={id}
+                      initial={{ opacity: 0, y: 24 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 12 }}
+                      transition={{ duration: 0.55, ease: EASE, delay: 0.05 + i * 0.05 }}
+                      className="border-b border-line"
+                    >
+                      <a
+                        href={href(id)}
+                        onClick={() => setOpen(false)}
+                        className="group flex items-center justify-between py-4 text-[2rem] font-medium tracking-[-0.03em] text-fg"
+                      >
+                        <span className="flex items-baseline gap-3">
+                          <span className="font-mono text-xs text-primary">0{i + 1}</span>
+                          {t(id)}
+                        </span>
+                        <ArrowUpRight aria-hidden className="size-5 text-subtle transition-transform group-active:translate-x-1" />
+                      </a>
+                    </motion.li>
+                  ))}
+                </ul>
               </nav>
-              <ButtonLink href={site.cv[locale]} download size="lg" className="mt-3 w-full">
-                <ArrowDownToLine aria-hidden className="size-4" />
-                {t("cv")}
-              </ButtonLink>
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
-      </div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5, ease: EASE, delay: 0.35 }}
+                className="space-y-4"
+              >
+                <p className="flex items-center gap-2 text-sm text-muted">
+                  <span className="relative flex size-2">
+                    <span className="absolute inset-0 animate-[pulse-ring_2s_ease-out_infinite] rounded-full bg-success" />
+                    <span className="relative size-2 rounded-full bg-success" />
+                  </span>
+                  {t("menuStatus")}
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  <ButtonLink href={site.cv[locale]} download variant="secondary" size="lg">
+                    <ArrowDownToLine aria-hidden className="size-4" />
+                    {t("cv")}
+                  </ButtonLink>
+                  <ButtonLink href={href("contact")} size="lg" onClick={() => setOpen(false)}>
+                    {t("contactCta")}
+                  </ButtonLink>
+                </div>
+                <div role="group" aria-label={t("language")} className="flex justify-center gap-6 text-sm font-semibold uppercase">
+                  {routing.locales.map((code) => (
+                    <button
+                      key={code}
+                      type="button"
+                      onClick={() => switchLocale(code)}
+                      aria-pressed={code === locale}
+                      className={code === locale ? "text-fg" : "text-fg/40"}
+                    >
+                      {code.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </>
   );
 }

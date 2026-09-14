@@ -4,6 +4,7 @@ import { PerspectiveCamera, View } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
+import { SceneBoundary } from "./scene-boundary";
 import { CITIES, type CityId } from "@/lib/site";
 import type { Progress } from "@/lib/use-scroll-progress";
 import dots from "./globe-dots.json";
@@ -212,7 +213,9 @@ function Scene({ progress, home }: { progress: Progress; home: string }) {
 export default function GlobeView({ progress, home, className }: { progress: Progress; home: string; className?: string }) {
   return (
     <View className={className}>
-      <Scene progress={progress} home={home} />
+      <SceneBoundary>
+        <Scene progress={progress} home={home} />
+      </SceneBoundary>
     </View>
   );
 }

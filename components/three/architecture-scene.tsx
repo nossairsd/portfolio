@@ -19,6 +19,7 @@ import {
   siTailwindcss,
 } from "simple-icons";
 import * as THREE from "three";
+import { SceneBoundary } from "./scene-boundary";
 import type { Progress } from "@/lib/use-scroll-progress";
 import { BLUE, BlobShadow, StudioLights, damp } from "./shared";
 import { makeLabel, makeLogoTile } from "./textures";
@@ -213,7 +214,9 @@ export default function ArchitectureView({
 }) {
   return (
     <View className={className}>
-      <Scene progress={progress} layers={layers} />
+      <SceneBoundary>
+        <Scene progress={progress} layers={layers} />
+      </SceneBoundary>
     </View>
   );
 }
