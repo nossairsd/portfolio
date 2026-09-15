@@ -4,6 +4,7 @@ import { Contact } from "@/components/sections/contact";
 import { Education } from "@/components/sections/education";
 import { Experience } from "@/components/sections/experience";
 import { Hero } from "@/components/sections/hero";
+import { HeroSequence } from "@/components/sections/hero-sequence";
 import { Process } from "@/components/sections/process";
 import { Projects } from "@/components/sections/projects";
 import { Proof } from "@/components/sections/proof";
@@ -18,9 +19,9 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
 
   return (
     <>
-      <Hero />
-      <Proof />
-      <About />
+      <HeroSequence hero={<Hero />} next={<About />}>
+        <Proof />
+      </HeroSequence>
       <Process />
       <Experience />
       <Projects />

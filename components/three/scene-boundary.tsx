@@ -1,6 +1,7 @@
 "use client";
 
-import { Component, Suspense, type ReactNode } from "react";
+import { useThree } from "@react-three/fiber";
+import { Component, Suspense, useEffect, type ReactNode } from "react";
 
 /**
  * A 3D scene is decoration next to HTML that carries the same content, so if it
@@ -23,10 +24,29 @@ class Boundary extends Component<{ children: ReactNode }, { failed: boolean }> {
   }
 }
 
+/**
+ * Compiles the scene's shaders as soon as it mounts, off the main thread where
+ * the browser supports parallel compilation, so the first frame the scene is
+ * seen does not stall while programs are built.
+ */
+function Precompile() {
+  const { gl, scene, camera } = useThree();
+  useEffect(() => {
+    const id = window.requestAnimationFrame(() => {
+      gl.compileAsync(scene, camera).catch(() => {});
+    });
+    return () => window.cancelAnimationFrame(id);
+  }, [gl, scene, camera]);
+  return null;
+}
+
 export function SceneBoundary({ children }: { children: ReactNode }) {
   return (
     <Boundary>
-      <Suspense fallback={null}>{children}</Suspense>
+      <Suspense fallback={null}>
+        {children}
+        <Precompile />
+      </Suspense>
     </Boundary>
   );
 }

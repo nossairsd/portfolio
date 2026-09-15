@@ -22,7 +22,7 @@ export type Role = {
   stack: string[];
 };
 
-const MONOGRAMS: Record<string, string> = { kohler: "JD", pfe: "JD", lydec: "LY" };
+const MONOGRAMS: Record<string, string> = { kohler: "GK", pfe: "GK", lydec: "LY" };
 
 function RoleCard({ role, labels }: { role: Role; labels: { current: string; scope: string; show: string; hide: string } }) {
   const current = role.id === "kohler";

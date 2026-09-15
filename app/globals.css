@@ -136,6 +136,93 @@
   background-size: 22px 22px;
 }
 
+@utility bg-grid-fine {
+  background-image:
+    linear-gradient(to right, rgb(15 23 42 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(15 23 42 / 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* A thin light running around a rounded border: wrap content in `.beam`,
+   give it padding for the border width and an inner background. */
+.beam {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.beam::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: -1;
+  width: 300%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  background: conic-gradient(from 0deg, transparent 0deg, transparent 280deg, var(--beam-color, rgb(37 99 235 / 0.95)) 330deg, transparent 360deg);
+  animation: spin var(--beam-speed, 4s) linear infinite;
+}
+
+/* Returning visitors: the loader is hidden before first paint. */
+.intro-skip #preloader {
+  display: none;
+}
+
+/* Entrance-animated hero content becomes visible on its own if scripts are
+   slow or never run. Animations override inline styles, and only opacity and
+   filter are touched, so the scripted entrance and parallax are unaffected. */
+[data-intro] {
+  animation: intro-failsafe 0.01s linear 6s forwards;
+}
+@keyframes intro-failsafe {
+  to {
+    opacity: 1;
+    filter: none;
+  }
+}
+/* Masked letters also need their offset cleared; they never move afterwards. */
+[data-intro-rise] {
+  animation: intro-rise-failsafe 0.01s linear 6s forwards;
+}
+@keyframes intro-rise-failsafe {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* If scripts never run, the loader still gets out of the way. */
+@keyframes preloader-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes floor-travel {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 64px, 0);
+  }
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-120%);
+  }
+  100% {
+    transform: translateY(520%);
+  }
+}
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -48;
+  }
+}
+
 /* Lenis */
 html.lenis,
 html.lenis body {
@@ -170,6 +257,24 @@ html.lenis body {
   50%,
   100% {
     opacity: 0;
+  }
+}
+
+@keyframes stack-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes bar-pulse {
+  from {
+    transform: scaleY(0.35);
+  }
+  to {
+    transform: scaleY(1);
   }
 }
 

@@ -10,11 +10,10 @@ export function LogoMark({ className }: { className?: string }) {
     <span
       aria-hidden
       className={cn(
-        "relative grid size-9 shrink-0 place-items-center overflow-hidden rounded-[0.7rem] bg-gradient-to-b from-[#3b82f6] to-[#1d4ed8] shadow-[inset_0_1px_0_rgb(255_255_255/0.35),0_6px_16px_-6px_rgb(37_99_235/0.7)]",
+        "relative grid size-9 shrink-0 place-items-center overflow-hidden rounded-[0.7rem] bg-primary shadow-[inset_0_1px_0_rgb(255_255_255/0.25),0_4px_12px_-4px_rgb(37_99_235/0.55)]",
         className,
       )}
     >
-      <span className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/20 to-transparent" />
       <span className="relative flex items-baseline font-mono text-[0.9375rem] font-semibold leading-none tracking-[-0.06em] text-white">
         ns
         <span className="ml-px inline-block h-[0.14em] w-[0.42em] translate-y-[0.02em] animate-[caret_1.1s_steps(1)_infinite] rounded-[1px] bg-white/90" />

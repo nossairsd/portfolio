@@ -91,52 +91,60 @@ export function makeLabel(
   return { texture: toTexture(canvas), aspect: width / height };
 }
 
-/** A square tile: brand mark (simple-icons path) or a wordmark, with a caption. */
-export function makeLogoTile(label: string, path?: string, hex?: string) {
-  // Drawn at 512 for crisp paths, uploaded at 256: sixteen tiles stay light.
-  const size = 512;
+/** A texture drawn once on a canvas of the given size. */
+export function drawTexture(
+  width: number,
+  height: number,
+  draw: (ctx: CanvasRenderingContext2D, helpers: { font: string; roundedRect: typeof roundedRect }) => void,
+) {
   const canvas = document.createElement("canvas");
-  canvas.width = size;
-  canvas.height = size;
+  canvas.width = width;
+  canvas.height = height;
   const ctx = canvas.getContext("2d")!;
-  const font = pageFont();
-
-  ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0, 0, size, size);
-
-  const color = hex ? `#${hex}` : "#2563eb";
-  if (path) {
-    const icon = 210;
-    ctx.save();
-    ctx.translate((size - icon) / 2, 92);
-    ctx.scale(icon / 24, icon / 24);
-    ctx.fillStyle = color;
-    ctx.fill(new Path2D(path));
-    ctx.restore();
-  } else {
-    // No distributable mark (Microsoft products): the name is the logo.
-    ctx.fillStyle = color;
-    ctx.font = `700 ${label.length > 8 ? 78 : 104}px ${font}`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(label, size / 2, size / 2);
-    return toTexture(downscale(canvas, 256));
-  }
-
-  ctx.fillStyle = "#334155";
-  ctx.font = `600 46px ${font}`;
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText(label, size / 2, 410);
-
-  return toTexture(downscale(canvas, 256));
+  draw(ctx, { font: pageFont(), roundedRect });
+  return toTexture(canvas);
 }
 
-function downscale(source: HTMLCanvasElement, size: number) {
-  const canvas = document.createElement("canvas");
-  canvas.width = canvas.height = size;
-  const ctx = canvas.getContext("2d")!;
-  ctx.imageSmoothingQuality = "high";
-  ctx.drawImage(source, 0, 0, size, size);
-  return canvas;
+type Mark = { path: string; hex: string };
+
+/** Brand colours too pale to read on white are darkened. */
+function readable(hex: string) {
+  return hex === "00FF74" ? "#16a34a" : `#${hex === "000000" ? "0b1220" : hex}`;
+}
+
+/** A round white badge with a brand mark, or a wordmark when there is none. */
+export function makeBadge(mark: Mark | string) {
+  return drawTexture(256, 256, (ctx, { font }) => {
+    ctx.beginPath();
+    ctx.arc(128, 128, 122, 0, Math.PI * 2);
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = "rgba(15,23,42,0.12)";
+    ctx.stroke();
+    if (typeof mark === "string") {
+      ctx.fillStyle = "#0078d4";
+      ctx.font = `700 ${mark.length > 5 ? 52 : 64}px ${font}`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(mark, 128, 132);
+      return;
+    }
+    const icon = 124;
+    ctx.save();
+    ctx.translate((256 - icon) / 2, (256 - icon) / 2);
+    ctx.scale(icon / 24, icon / 24);
+    ctx.fillStyle = readable(mark.hex);
+    ctx.fill(new Path2D(mark.path));
+    ctx.restore();
+  });
+}
+
+/** A brand mark alone, in one colour, on a transparent square. */
+export function makeMark(path: string, color: string, size = 256) {
+  return drawTexture(size, size, (ctx) => {
+    ctx.scale(size / 24, size / 24);
+    ctx.fillStyle = color;
+    ctx.fill(new Path2D(path));
+  });
 }

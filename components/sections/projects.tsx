@@ -29,12 +29,15 @@ export async function Projects() {
 
       <FeaturedProject
         chapters={t.raw("metaAds.chapters") as Chapter[]}
+        screens={t.raw("metaAds.screens") as string[]}
         stack={t.raw("metaAds.stack") as string[]}
         labels={{
           featured: t("featured"),
           name: t("metaAds.name"),
           tagline: t("metaAds.tagline"),
           year: t("metaAds.year"),
+          live: t("metaAds.live"),
+          stackLabel: t("metaAds.stackLabel"),
           summary: t("metaAds.summary"),
           demo: t("metaAds.demo"),
           code: t("metaAds.code"),

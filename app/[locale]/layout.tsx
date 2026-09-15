@@ -10,6 +10,7 @@ import { CommandMenu } from "@/components/layout/command-menu";
 import { Footer } from "@/components/layout/footer";
 import { Nav } from "@/components/layout/nav";
 import { SmoothScroll } from "@/components/providers/smooth-scroll";
+import { Preloader } from "@/components/intro/preloader";
 import { SceneCanvas } from "@/components/three/lazy";
 import "../globals.css";
 
@@ -55,6 +56,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: "meta" });
+  const loader = await getTranslations({ locale, namespace: "hero.preloader" });
   const personJsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -74,12 +76,18 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
     <html lang={locale} id="top" className={`${dmSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning>
       <head>
         {/* Lets CSS hide text that is about to be animated, only when scripts run. */}
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "document.documentElement.classList.add('js');try{if(sessionStorage.getItem('ns-intro-seen')||matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('intro-skip')}catch(e){}",
+          }}
+        />
       </head>
       {/* overflow-x is clipped on <body> with `clip`, which, unlike `hidden`,
           does not create a scroll container and keeps position: sticky working. */}
       <body className="min-h-svh overflow-x-clip">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
+        <Preloader title={loader("title")} status={loader("status")} lines={loader.raw("lines") as string[]} />
         <NextIntlClientProvider>
           <SmoothScroll>
             <Nav />

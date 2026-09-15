@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDownToLine, ArrowUpRight, Copy, MapPin } from "lucide-react";
+import { ArrowDownToLine, Copy, MapPin } from "lucide-react";
 import { useRef } from "react";
 import { copyEmail } from "@/components/layout/command-menu";
 import { FadeIn } from "@/components/motion/fade-in";
@@ -9,6 +9,7 @@ import { GithubIcon } from "@/components/ui/brand-icon";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { site, type CityId } from "@/lib/site";
 import { useScrollProgress } from "@/lib/use-scroll-progress";
+import { ComposeMenu, type ComposeLabels } from "./compose-menu";
 
 type Labels = {
   caption: string;
@@ -20,6 +21,7 @@ type Labels = {
   cvFr: string;
   cvEn: string;
   location: string;
+  compose: ComposeLabels;
 };
 
 export function ContactPanel({ cities, labels }: { cities: Record<CityId, string>; labels: Labels }) {
@@ -43,10 +45,7 @@ export function ContactPanel({ cities, labels }: { cities: Record<CityId, string
             </div>
           </div>
           <div className="grid grid-cols-2 gap-2 p-2 pt-3">
-            <ButtonLink href={`mailto:${site.email}`} className="col-span-2" size="lg">
-              {labels.write}
-              <ArrowUpRight aria-hidden className="size-4" />
-            </ButtonLink>
+            <ComposeMenu className="col-span-2" labels={labels.compose} />
             <ButtonLink href={site.cv.fr} download variant="secondary">
               <ArrowDownToLine aria-hidden className="size-4" />
               {labels.cvFr}

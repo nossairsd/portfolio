@@ -7,7 +7,7 @@ export async function Contact() {
   const t = await getTranslations("contact");
 
   return (
-    <section id="contact" className="relative scroll-mt-24 overflow-hidden">
+    <section id="contact" className="relative scroll-mt-24 overflow-x-clip">
       <div aria-hidden className="absolute inset-x-0 bottom-0 h-[70%] bg-[radial-gradient(60%_60%_at_70%_70%,#eff6ff,transparent_70%)]" />
       <div className="container-page relative section-y">
         <SectionHeading index="07" eyebrow={t("eyebrow")} lead={t("titleLead")} quiet={t("titleQuiet")} intro={t("text")} />
@@ -23,6 +23,15 @@ export async function Contact() {
             cvFr: t("cvFr"),
             cvEn: t("cvEn"),
             location: t("location"),
+            compose: {
+              write: t("write"),
+              subject: t("subject"),
+              gmail: t("gmail"),
+              outlook: t("outlook"),
+              app: t("app"),
+              copy: t("copyAddress"),
+              copied: t("copied"),
+            },
           }}
         />
       </div>
