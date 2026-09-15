@@ -3,9 +3,22 @@
 import { View } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useState } from "react";
+import type { WebGLRenderer } from "three";
 import { clipViewsToCanvas } from "./clip-views";
 import { useViewsState } from "./visibility";
 import { hasWebGL } from "./webgl";
+
+/**
+ * Wipes the whole canvas to fully transparent. The clear colour is set every
+ * time: a new renderer starts with opaque black, and a clear before the first
+ * real render would otherwise paint the fixed canvas black over the page until
+ * a 3D section comes into view.
+ */
+function clearToTransparent(gl: WebGLRenderer) {
+  gl.setClearColor(0x000000, 0);
+  gl.setScissorTest(false);
+  gl.clear(true, true, true);
+}
 
 /**
  * Views render with priority 1, which switches R3F to manual rendering: nothing
@@ -14,8 +27,7 @@ import { hasWebGL } from "./webgl";
  */
 function ClearEachFrame() {
   useFrame(({ gl }) => {
-    gl.setScissorTest(false);
-    gl.clear(true, true, true);
+    clearToTransparent(gl);
   }, 0);
   return null;
 }
@@ -27,9 +39,7 @@ function ClearEachFrame() {
 function ClearWhenIdle({ idle }: { idle: boolean }) {
   const gl = useThree((state) => state.gl);
   useEffect(() => {
-    if (!idle) return;
-    gl.setScissorTest(false);
-    gl.clear(true, true, true);
+    if (idle) clearToTransparent(gl);
   }, [idle, gl]);
   return null;
 }
@@ -80,6 +90,7 @@ function WebGLCanvas({ onReset }: { onReset: () => void }) {
         gl.debug.checkShaderErrors = process.env.NODE_ENV !== "production";
         // Views scrolling out must never draw past the canvas edge (GPU hangs).
         clipViewsToCanvas(gl);
+        gl.setClearColor(0x000000, 0);
         const canvas = gl.domElement;
         canvas.addEventListener("webglcontextlost", (event) => {
           event.preventDefault();
