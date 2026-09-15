@@ -19,7 +19,12 @@ const listeners = new Set<() => void>();
 let snapshot = { anyNear: false, anyVisible: false, warm: false };
 
 function publish(patch: Partial<typeof snapshot> = {}) {
-  const next = { ...snapshot, ...patch, anyNear: near.size > 0, anyVisible: visible.size > 0 };
+  const anyNear = near.size > 0;
+  // Once a view has needed the canvas, it stays: destroying the WebGL context
+  // when the visitor scrolls past and building it again on the way back costs
+  // seconds of GPU work, and the scene would blink out in between.
+  const warm = snapshot.warm || patch.warm === true || anyNear;
+  const next = { ...snapshot, ...patch, warm, anyNear, anyVisible: visible.size > 0 };
   if (next.anyNear === snapshot.anyNear && next.anyVisible === snapshot.anyVisible && next.warm === snapshot.warm) return;
   snapshot = next;
   listeners.forEach((listener) => listener());

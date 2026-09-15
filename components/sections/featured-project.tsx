@@ -165,8 +165,7 @@ export function FeaturedProject({
 
       {/* The 3D stage covers the screen below the navigation: the camera frames
           the laptop on the right, and nothing can be cut at the edges of a
-          narrower box. Starting it under the bar (not at the very top) also
-          avoids a GPU stall when the stage scrolls out of the viewport. */}
+          narrower box. */}
       <div className="absolute inset-x-0 bottom-0 h-[44%] lg:inset-0 lg:top-16 lg:h-auto">
         <LaptopView progress={progress} className="absolute inset-0" />
 

@@ -23,6 +23,8 @@ const HALF_FOV = THREE.MathUtils.degToRad(34 / 2);
 /** On wide stages the laptop is framed in the right part, beside the text. */
 const WIDE = 900;
 const FRAME_FROM = 0.45;
+/** How far the laptop sits above the stage's centre, as a share of its height. */
+const LIFT = 0.05;
 
 /**
  * Loads the screen images without Suspense and with retries; a screen stays
@@ -140,6 +142,7 @@ function Laptop({ progress }: { progress: Progress }) {
   const look = useMemo(() => new THREE.Vector3(), []);
   const forward = useMemo(() => new THREE.Vector3(), []);
   const right = useMemo(() => new THREE.Vector3(), []);
+  const up = useMemo(() => new THREE.Vector3(), []);
 
   useFrame(({ clock, pointer }, delta) => {
     smooth.current = damp(smooth.current, progress.current, 4.5, delta);
@@ -202,6 +205,11 @@ function Laptop({ progress }: { progress: Progress }) {
       const slide = (FRAME_FROM / 2 - 0.025) * across;
       camera.position.addScaledVector(right, -slide);
       look.addScaledVector(right, -slide);
+      // And a little downwards, which lifts the laptop clear of the bottom edge.
+      up.crossVectors(right, forward).normalize();
+      const lift = LIFT * 2 * reach * Math.tan(HALF_FOV);
+      camera.position.addScaledVector(up, -lift);
+      look.addScaledVector(up, -lift);
     }
     camera.lookAt(look);
   });
