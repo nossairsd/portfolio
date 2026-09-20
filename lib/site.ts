@@ -20,17 +20,17 @@ export const site = {
   },
 } as const;
 
-export type CityId = "tangier" | "paris" | "lyon" | "brussels" | "geneva" | "luxembourg" | "amsterdam";
+export type CityId = "tangier" | "paris" | "london" | "berlin" | "dubai" | "montreal" | "remote";
 
 /** Home, then the places the contact globe draws a route to. */
 export const CITIES: Record<CityId, { lat: number; lon: number }> = {
   tangier: { lat: 35.7595, lon: -5.834 },
   paris: { lat: 48.8566, lon: 2.3522 },
-  lyon: { lat: 45.764, lon: 4.8357 },
-  brussels: { lat: 50.8503, lon: 4.3517 },
-  geneva: { lat: 46.2044, lon: 6.1432 },
-  luxembourg: { lat: 49.6116, lon: 6.1319 },
-  amsterdam: { lat: 52.3676, lon: 4.9041 },
+  london: { lat: 51.5072, lon: -0.1276 },
+  berlin: { lat: 52.52, lon: 13.405 },
+  dubai: { lat: 25.2048, lon: 55.2708 },
+  montreal: { lat: 45.5019, lon: -73.5674 },
+  remote: { lat: 1.3521, lon: 103.8198 },
 };
 
 /** Whole calendar months elapsed since an ISO date, so the site never goes stale. */

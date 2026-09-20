@@ -13,7 +13,7 @@ import { makeLabel } from "./textures";
 
 const RADIUS = 2;
 const DEG = Math.PI / 180;
-const DESTINATIONS: CityId[] = ["paris", "lyon", "brussels", "geneva", "luxembourg", "amsterdam"];
+const DESTINATIONS: CityId[] = ["paris", "london", "berlin", "dubai", "montreal", "remote"];
 
 function toVector(lat: number, lon: number, radius = RADIUS) {
   const phi = (90 - lat) * DEG;
@@ -83,7 +83,8 @@ function Arc({ to, index, drawn }: { to: CityId; index: number; drawn: { current
     const start = toVector(CITIES.tangier.lat, CITIES.tangier.lon);
     const end = toVector(CITIES[to].lat, CITIES[to].lon);
     const mid = start.clone().add(end).multiplyScalar(0.5);
-    const lift = 1 + start.distanceTo(end) * 0.55;
+    // Long hops stay close to the surface: a high arc would leave the frame.
+    const lift = 1 + start.distanceTo(end) * 0.18;
     mid.normalize().multiplyScalar(RADIUS * lift);
     return new THREE.QuadraticBezierCurve3(start, mid, end);
   }, [to]);

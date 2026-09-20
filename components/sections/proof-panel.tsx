@@ -1,7 +1,7 @@
 "use client";
 
 import NumberFlow from "@number-flow/react";
-import { CalendarRange, FlaskConical, ShieldCheck, Timer, type LucideIcon } from "lucide-react";
+import { CalendarRange, FlaskConical, Smartphone, Timer, type LucideIcon } from "lucide-react";
 import { motion, useInView, useMotionValue, useMotionValueEvent, useTransform, type MotionValue } from "motion/react";
 import { useRef, useState } from "react";
 import { cn } from "@/lib/cn";
@@ -13,7 +13,7 @@ export type ProofStat = {
   suffix?: string;
   label: string;
   tag: string;
-  kind: "months" | "delay" | "errors" | "tests";
+  kind: "months" | "audit" | "tests" | "mobile";
 };
 
 export type ProofLabels = {
@@ -25,15 +25,20 @@ export type ProofLabels = {
   after: string;
   since: string;
   delayCaption: string;
+  auditTitle: string;
+  auditLead: string;
+  auditDelay: string;
+  auditErrors: string;
+  realtime: string;
   orgs: string[];
 };
 
 const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
 const ICONS: Record<ProofStat["kind"], LucideIcon> = {
   months: CalendarRange,
-  delay: Timer,
-  errors: ShieldCheck,
+  audit: Timer,
   tests: FlaskConical,
+  mobile: Smartphone,
 };
 
 /* -------------------------------------------------------------------------- */
@@ -165,6 +170,32 @@ function TestsViz({ active, total }: { active: boolean; total: number }) {
   );
 }
 
+/** Three lines from the field: an incident lands, the alert goes out. */
+function RealtimeViz({ active }: { active: boolean }) {
+  return (
+    <div aria-hidden className="space-y-1.5">
+      {[0, 1, 2].map((row) => (
+        <span key={row} className="flex items-center gap-2">
+          <span
+            className="size-1.5 shrink-0 rounded-full transition-colors duration-500"
+            style={{ backgroundColor: active ? "#2563eb" : "rgb(15 23 42 / 0.12)", transitionDelay: active ? `${200 + row * 180}ms` : "0ms" }}
+          />
+          <span className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-fg/[0.06]">
+            <span
+              className="absolute inset-y-0 left-0 rounded-full bg-primary/70 transition-transform duration-700 ease-out"
+              style={{
+                width: `${[86, 62, 74][row]}%`,
+                transform: active ? "translateX(0)" : "translateX(-102%)",
+                transitionDelay: active ? `${260 + row * 180}ms` : "0ms",
+              }}
+            />
+          </span>
+        </span>
+      ))}
+    </div>
+  );
+}
+
 /* -------------------------------------------------------------------------- */
 /*  Card                                                                      */
 /* -------------------------------------------------------------------------- */
@@ -270,7 +301,7 @@ export function ProofPanel({ labels, stats, locale }: { labels: ProofLabels; sta
   });
   const active = pinned ? reached : inView;
 
-  const [months, delay, errors, tests] = stats;
+  const [months, audit, tests, mobile] = stats;
   // Cards are keyed on the mode: the server renders the in-flow version, and
   // switching to the scroll sequence must not inherit its hidden entrance state.
 
@@ -325,34 +356,57 @@ export function ProofPanel({ labels, stats, locale }: { labels: ProofLabels; sta
             </div>
           </Card>
 
-          {/* Delay: wide card, figure and chart side by side */}
-          <Card key={`delay-${pinned}`} stat={delay} index={1} active={active} progress={progress} pinned={pinned} className="col-span-2 lg:col-span-8">
-            <div className="mt-2 grid flex-1 grid-cols-[auto_1fr] items-center gap-4 sm:mt-4 sm:gap-12">
+          {/* The audit platform: both of its figures, side by side. */}
+          <Card key={`audit-${pinned}`} stat={audit} index={1} active={active} progress={progress} pinned={pinned} className="col-span-2 lg:col-span-8">
+            <div className="mt-2 sm:mt-2.5">
+              <p className="text-[0.9375rem] font-semibold tracking-[-0.01em] text-fg">{labels.auditTitle}</p>
+              <p className="mt-1 line-clamp-1 max-w-xl text-[0.8125rem] leading-snug text-muted max-sm:hidden">{labels.auditLead}</p>
+            </div>
+            <div className="mt-2 grid flex-1 content-center gap-3 sm:mt-3 sm:grid-cols-2 sm:gap-8">
               <div>
-                <BigNumber stat={delay} active={active} locale={locale} />
-                <p className="mt-2 max-w-[8.5rem] text-[0.75rem] leading-snug text-muted sm:max-w-[16rem] sm:text-sm">{delay.label}</p>
+                <p className="flex items-baseline text-[clamp(1.75rem,3vw,2.75rem)] font-medium leading-none tracking-[-0.05em] text-fg">
+                  <span className="text-subtle">−</span>
+                  <NumberFlow value={active ? 65 : 0} locales={locale} className="tabular-nums" />
+                  <span className="ml-1 text-[0.5em] tracking-[-0.02em] text-primary">%</span>
+                </p>
+                <p className="mt-1 text-[0.8125rem] leading-snug text-muted">{labels.auditDelay}</p>
+                <div className="mt-2.5">
+                  <DelayViz value={65} active={active} before={labels.before} after={labels.after} caption={labels.delayCaption} />
+                </div>
               </div>
-              <DelayViz value={delay.value} active={active} before={labels.before} after={labels.after} caption={labels.delayCaption} />
+              <div>
+                <p className="flex items-baseline text-[clamp(1.75rem,3vw,2.75rem)] font-medium leading-none tracking-[-0.05em] text-fg">
+                  <span className="text-subtle">−</span>
+                  <NumberFlow value={active ? 80 : 0} locales={locale} className="tabular-nums" />
+                  <span className="ml-1 text-[0.5em] tracking-[-0.02em] text-primary">%</span>
+                </p>
+                <p className="mt-1 text-[0.8125rem] leading-snug text-muted">{labels.auditErrors}</p>
+                <div className="mt-2.5">
+                  <ErrorsViz value={80} active={active} />
+                </div>
+              </div>
             </div>
           </Card>
 
-          <Card key={`errors-${pinned}`} stat={errors} index={2} active={active} progress={progress} pinned={pinned} compact className="lg:col-span-4">
-            <div className="mt-3 sm:mt-4">
-              <BigNumber stat={errors} active={active} locale={locale} />
-              <p className="mt-2 text-[0.8125rem] leading-snug text-muted sm:text-sm">{errors.label}</p>
-            </div>
-            <div className="mt-auto pt-3 sm:pt-4">
-              <ErrorsViz value={errors.value} active={active} />
-            </div>
-          </Card>
-
-          <Card key={`tests-${pinned}`} stat={tests} index={3} active={active} progress={progress} pinned={pinned} compact className="lg:col-span-4">
+          <Card key={`tests-${pinned}`} stat={tests} index={2} active={active} progress={progress} pinned={pinned} compact className="lg:col-span-4">
             <div className="mt-3 sm:mt-4">
               <BigNumber stat={tests} active={active} locale={locale} />
               <p className="mt-2 text-[0.8125rem] leading-snug text-muted sm:text-sm">{tests.label}</p>
             </div>
             <div className="mt-auto pt-3 sm:pt-4">
               <TestsViz active={active} total={tests.value} />
+            </div>
+          </Card>
+
+          {/* The mobile app before that: the third place the work was done. */}
+          <Card key={`mobile-${pinned}`} stat={mobile} index={3} active={active} progress={progress} pinned={pinned} compact className="lg:col-span-4">
+            <div className="mt-3 sm:mt-4">
+              <BigNumber stat={mobile} active={active} locale={locale} />
+              <p className="mt-2 text-[0.8125rem] leading-snug text-muted sm:text-sm">{mobile.label}</p>
+            </div>
+            <div className="mt-auto pt-3 sm:pt-4">
+              <p className="mb-2 font-mono text-[0.625rem] uppercase tracking-wider text-subtle max-sm:hidden">{labels.realtime}</p>
+              <RealtimeViz active={active} />
             </div>
           </Card>
         </ul>

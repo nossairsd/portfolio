@@ -167,7 +167,7 @@ export function StackTrack({ layers, labels }: { layers: Layer[]; labels: StackL
                     {layer.items.map((item, i) => (
                       <motion.li
                         key={item}
-                        className="flex min-w-0 items-center gap-2.5 rounded-xl bg-white px-3 py-2.5 text-sm font-medium text-fg-2 ring-1 ring-inset ring-fg/[0.08]"
+                        className="flex min-w-0 items-center gap-2.5 rounded-xl bg-white/80 px-3 py-2.5 text-sm font-medium text-fg-2 shadow-[0_0_0_1px_rgb(37_99_235/0.08),0_12px_28px_-26px_rgb(15_23_42/0.5)]"
                         initial={{ opacity: 0, y: 6 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, ease: EASE_OUT, delay: 0.08 + i * 0.05 }}
@@ -206,8 +206,10 @@ export function StackTrack({ layers, labels }: { layers: Layer[]; labels: StackL
                   <li
                     key={l.name}
                     className={cn(
-                      "grid grid-cols-1 items-center gap-2 rounded-2xl bg-white/90 p-2.5 transition-[opacity,box-shadow] duration-500 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-3 sm:p-3",
-                      lit ? "shadow-[0_0_0_2px_#2563eb,0_12px_28px_-18px_rgb(15_23_42/0.35)]" : "shadow-[0_0_0_1px_rgb(15_23_42/0.08)]",
+                      "grid grid-cols-1 items-center gap-2 rounded-[1.25rem] p-2.5 transition-[opacity,box-shadow,background-color] duration-500 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-3 sm:p-3",
+                      lit
+                        ? "bg-white shadow-[0_0_0_1.5px_#2563eb,0_22px_50px_-34px_rgb(15_23_42/0.55)]"
+                        : "bg-white/70 shadow-[0_0_0_1px_rgb(37_99_235/0.07),0_14px_34px_-30px_rgb(15_23_42/0.5)]",
                       waiting && "opacity-55",
                     )}
                   >
@@ -231,9 +233,9 @@ export function StackTrack({ layers, labels }: { layers: Layer[]; labels: StackL
                             key={item}
                             ref={onRoute ? (el) => { hubs.current[i] = el; } : undefined}
                             className={cn(
-                              "flex min-w-0 flex-col items-center justify-center gap-1.5 rounded-xl px-1 py-2.5 transition-[transform,background-color,box-shadow] duration-500 sm:py-3",
-                              marked ? "bg-white shadow-[0_0_0_1.5px_#2563eb]" : "bg-[#f6f8fb] shadow-[0_0_0_1px_rgb(15_23_42/0.05)]",
-                              lit && "-translate-y-0.5",
+                              "flex min-w-0 flex-col items-center justify-center gap-1.5 rounded-xl px-1 py-2.5 transition-[transform,background-color,box-shadow,opacity] duration-500 sm:py-3",
+                              marked ? "bg-white shadow-[0_0_0_1.5px_#2563eb]" : "bg-transparent",
+                              lit ? "-translate-y-0.5 opacity-100" : "opacity-80",
                             )}
                           >
                             <ToolIcon name={item} className="size-5 sm:size-6" />

@@ -4,7 +4,7 @@ import { Blocks, Braces, FlaskConical, ShieldCheck, Workflow, type LucideIcon } 
 import { AnimatePresence, motion, useInView } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { EASE_OUT } from "@/components/motion/fade-in";
-import { ShellView } from "@/components/three/lazy";
+import { ToolsView } from "@/components/three/lazy";
 import { cn } from "@/lib/cn";
 import { useScrollProgress } from "@/lib/use-scroll-progress";
 import { ToolIcon } from "../process/tools";
@@ -21,16 +21,14 @@ const pad = (n: number) => String(n).padStart(2, "0");
 /**
  * The tools that belong to no single layer. Each family is read one at a time:
  * the list opens on the left with its tools and their real marks, while on the
- * right the same family lights up as an orbit around the four layers of the
- * stack. It plays on its own and stops as soon as a visitor takes over.
+ * right the whole toolbox floats as cards, and the family being read steps
+ * forward. It plays on its own and stops as soon as a visitor takes over.
  */
 export function Transverse({
   groups,
-  layers,
   labels,
 }: {
   groups: TransverseGroup[];
-  layers: string[];
   labels: { title: string; intro: string; caption: string };
 }) {
   const block = useRef<HTMLDivElement>(null);
@@ -49,6 +47,18 @@ export function Transverse({
 
   return (
     <div ref={block} className="relative">
+      {/* The marks the 3D cards are drawn from: the same icons as the list.
+          Kept rendered but invisible, not hidden: a mark whose colours come
+          from a gradient only paints when its definition is in a live tree. */}
+      <span aria-hidden className="pointer-events-none absolute size-0 overflow-hidden opacity-0">
+        {groups.flatMap((group) =>
+          group.items.map((item) => (
+            <span key={item} data-tool-icon={item}>
+              <ToolIcon name={item} />
+            </span>
+          )),
+        )}
+      </span>
       <div className="flex items-center gap-4">
         <h3 className="eyebrow">{labels.title}</h3>
         <span className="h-px flex-1 bg-primary/15" />
@@ -162,22 +172,14 @@ export function Transverse({
         {/* The same families, wrapped around the stack. */}
         <div className="lg:col-span-5">
           <div className="relative mx-auto aspect-square w-full max-w-[27rem]">
-            <ShellView
-              groups={groups.map((group) => ({ name: group.name, count: group.items.length }))}
-              layers={layers}
+            <ToolsView
+              groups={groups.map((group) => ({ name: group.name, items: group.items }))}
               active={active}
               progress={progress}
               className="absolute inset-0"
             />
           </div>
-          <p className="-mt-2 text-center font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-subtle">{labels.caption}</p>
-          <ul className="mt-3 flex flex-wrap justify-center gap-1.5">
-            {layers.map((layer) => (
-              <li key={layer} className="rounded-full bg-white px-2.5 py-1 text-xs text-fg-2 ring-1 ring-line">
-                {layer}
-              </li>
-            ))}
-          </ul>
+          <p className="-mt-1 text-center font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-subtle">{labels.caption}</p>
         </div>
       </div>
     </div>

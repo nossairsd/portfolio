@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "marks": "node scripts/build-marks.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -29,6 +30,8 @@
     "three": "^0.186.0"
   },
   "devDependencies": {
+    "@iconify-json/devicon": "^1.2.66",
+    "@iconify-json/logos": "^1.2.14",
     "@tailwindcss/postcss": "^4",
     "@types/d3-geo": "^3.1.1",
     "@types/node": "^20",

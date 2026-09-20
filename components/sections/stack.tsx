@@ -33,7 +33,6 @@ export async function Stack() {
       <div className="container-page relative pb-24 md:pb-32">
         <Transverse
           groups={transversal}
-          layers={layers.map((layer) => layer.name)}
           labels={{ title: t("transversalTitle"), intro: t("transversalIntro"), caption: t("transversalCaption") }}
         />
       </div>

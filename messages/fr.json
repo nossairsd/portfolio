@@ -42,7 +42,7 @@
   },
   "hero": {
     "status": "Ouvert aux opportunités",
-    "mobility": "Mobilité France & Europe",
+    "mobility": "Mobilité internationale & remote",
     "role": "Software Engineer Full-Stack",
     "rolePrefix": "Software Engineer",
     "roles": ["Full-Stack", "APIs & Backend", "Cloud Azure", "IA intégrée"],
@@ -83,21 +83,35 @@
     }
   },
   "proof": {
-    "label": "Expérience et formation",
-    "eyebrow": "Impact",
-    "titleLead": "Des résultats mesurables,",
-    "titleQuiet": "livrés en production.",
-    "orgs": ["Groupe Kohler", "Lydec", "ENSA Tétouan"],
-    "months": "mois d'ingénierie chez Groupe Kohler",
-    "processing": "de délais sur un processus d'audit digitalisé",
-    "errors": "d'erreurs humaines sur ce même processus",
-    "tests": "tests automatisés sur Meta Ads Report Studio",
-    "tags": ["Groupe Kohler", "Processus d'audit", "Processus d'audit", "Meta Ads Report Studio"],
-    "before": "Avant",
-    "after": "Après",
-    "since": "Depuis oct. 2025",
-    "delayCaption": "Temps de traitement · base 100"
-  },
+      "label": "Expérience et formation",
+      "eyebrow": "Impact",
+      "titleLead": "Des résultats mesurables,",
+      "titleQuiet": "livrés en production.",
+      "orgs": [
+        "Groupe Kohler",
+        "Lydec",
+        "ENSA Tétouan"
+      ],
+      "months": "mois d'ingénierie chez Groupe Kohler",
+      "auditTitle": "Processus d'audit digitalisé",
+      "auditLead": "Un processus géré sous Excel, repris en microservices : moins d'attente, moins de ressaisie.",
+      "auditDelay": "de délais de traitement",
+      "auditErrors": "d'erreurs humaines",
+      "tests": "tests automatisés sur Meta Ads Report Studio",
+      "mobile": "pour livrer l'application mobile HSE temps réel chez Lydec",
+      "tags": [
+        "Groupe Kohler",
+        "Processus d'audit · Groupe Kohler",
+        "Meta Ads Report Studio",
+        "Lydec"
+      ],
+      "monthsUnit": "mois",
+      "before": "Avant",
+      "after": "Après",
+      "since": "Depuis oct. 2025",
+      "delayCaption": "Temps de traitement · base 100",
+      "realtime": "Incidents remontés du terrain, en temps réel"
+    },
   "about": {
     "eyebrow": "Profil",
     "titleLead": "Un ingénieur full-stack",
@@ -136,7 +150,7 @@
     "currentLabel": "En poste",
     "sheetRole": "Software Engineer Full-Stack",
     "available": "Disponible",
-    "mobilityValue": "France & Europe · remote",
+    "mobilityValue": "Partout · sur site ou remote",
     "downloadCv": "Télécharger le CV",
     "currentRole": "Software Engineer",
     "currentCompany": "Groupe Kohler",
@@ -416,7 +430,7 @@
       }
     ],
     "transversalIntro": "Cinq familles d'outils qui ne vivent pas dans une seule couche : elles traversent tout le système.",
-    "transversalCaption": "Les cinq familles, autour des quatre couches",
+    "transversalCaption": "Toute la boîte à outils · la famille en cours devant",
     "transversalTitle": "Transverse à toutes les couches",
     "transversal": [
       {
@@ -492,16 +506,16 @@
     "eyebrow": "Contact",
     "titleLead": "Travaillons",
     "titleQuiet": "ensemble.",
-    "text": "Je suis ouvert aux opportunités de Software Engineer full-stack en France et en Europe. Écrivez-moi, je réponds rapidement.",
-    "globeCaption": "Depuis Tanger, disponible pour la France et l'Europe",
+    "text": "Je suis ouvert aux postes de Software Engineer full-stack, partout : sur site avec mobilité internationale, hybride ou 100 % remote. Écrivez-moi, je réponds rapidement.",
+    "globeCaption": "Basé à Tanger, disponible partout : sur site ou en remote",
     "cities": {
       "tangier": "Tanger",
       "paris": "Paris",
-      "lyon": "Lyon",
-      "brussels": "Bruxelles",
-      "geneva": "Genève",
-      "luxembourg": "Luxembourg",
-      "amsterdam": "Amsterdam"
+      "london": "Londres",
+      "berlin": "Berlin",
+      "dubai": "Dubaï",
+      "montreal": "Montréal",
+      "remote": "Remote"
     },
     "emailLabel": "Email",
     "write": "M'écrire",
@@ -515,6 +529,7 @@
     "github": "GitHub",
     "cvFr": "CV français",
     "cvEn": "CV anglais",
+    "mode": "Sur site ou en remote",
     "location": "Tanger, Maroc"
   },
   "footer": {

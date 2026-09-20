@@ -42,7 +42,7 @@
   },
   "hero": {
     "status": "Open to new roles",
-    "mobility": "Relocation & remote",
+    "mobility": "Worldwide & remote",
     "role": "Full-Stack Software Engineer",
     "rolePrefix": "Software Engineer",
     "roles": ["Full-Stack", "APIs & Backend", "Cloud Azure", "Applied AI"],
@@ -83,21 +83,35 @@
     }
   },
   "proof": {
-    "label": "Experience and education",
-    "eyebrow": "Impact",
-    "titleLead": "Measurable results,",
-    "titleQuiet": "shipped to production.",
-    "orgs": ["Kohler Co.", "Lydec", "ENSA Tétouan"],
-    "months": "months of engineering at Kohler Co.",
-    "processing": "processing time on a digitised audit process",
-    "errors": "human error on that same process",
-    "tests": "automated tests on Meta Ads Report Studio",
-    "tags": ["Kohler Co.", "Audit process", "Audit process", "Meta Ads Report Studio"],
-    "before": "Before",
-    "after": "After",
-    "since": "Since Oct 2025",
-    "delayCaption": "Processing time · base 100"
-  },
+      "label": "Experience and education",
+      "eyebrow": "Impact",
+      "titleLead": "Measurable results,",
+      "titleQuiet": "shipped to production.",
+      "orgs": [
+        "Kohler Co.",
+        "Lydec",
+        "ENSA Tétouan"
+      ],
+      "months": "months of engineering at Kohler Co.",
+      "auditTitle": "Digitised audit process",
+      "auditLead": "A process run in Excel, rebuilt as microservices: less waiting, less re-typing.",
+      "auditDelay": "processing time",
+      "auditErrors": "human error",
+      "tests": "automated tests on Meta Ads Report Studio",
+      "mobile": "to ship the real-time HSE mobile app at Lydec",
+      "tags": [
+        "Kohler Co.",
+        "Audit process · Kohler Co.",
+        "Meta Ads Report Studio",
+        "Lydec"
+      ],
+      "monthsUnit": "months",
+      "before": "Before",
+      "after": "After",
+      "since": "Since Oct 2025",
+      "delayCaption": "Processing time · base 100",
+      "realtime": "Incidents reported from the field, in real time"
+    },
   "about": {
     "eyebrow": "Profile",
     "titleLead": "A full-stack engineer",
@@ -136,7 +150,7 @@
     "currentLabel": "Current role",
     "sheetRole": "Full-Stack Software Engineer",
     "available": "Available",
-    "mobilityValue": "Relocation & remote",
+    "mobilityValue": "Anywhere · on-site or remote",
     "downloadCv": "Download resume",
     "currentRole": "Software Engineer",
     "currentCompany": "Kohler Co.",
@@ -416,7 +430,7 @@
       }
     ],
     "transversalIntro": "Five families of tools that do not live in one layer: they run through the whole system.",
-    "transversalCaption": "The five families, around the four layers",
+    "transversalCaption": "The whole toolbox · the family being read up front",
     "transversalTitle": "Across every layer",
     "transversal": [
       {
@@ -492,16 +506,16 @@
     "eyebrow": "Contact",
     "titleLead": "Let's work",
     "titleQuiet": "together.",
-    "text": "I'm open to full-stack Software Engineer roles, on-site with relocation or remote. Drop me a line and I'll reply quickly.",
-    "globeCaption": "Based in Tangier, open to relocation across Europe",
+    "text": "I'm open to full-stack Software Engineer roles anywhere: on-site with relocation, hybrid or fully remote. Drop me a line and I'll reply quickly.",
+    "globeCaption": "Based in Tangier, available anywhere: on-site or remote",
     "cities": {
       "tangier": "Tangier",
       "paris": "Paris",
-      "lyon": "Lyon",
-      "brussels": "Brussels",
-      "geneva": "Geneva",
-      "luxembourg": "Luxembourg",
-      "amsterdam": "Amsterdam"
+      "london": "London",
+      "berlin": "Berlin",
+      "dubai": "Dubai",
+      "montreal": "Montreal",
+      "remote": "Remote"
     },
     "emailLabel": "Email",
     "write": "Email me",
@@ -515,6 +529,7 @@
     "github": "GitHub",
     "cvFr": "French resume",
     "cvEn": "English resume",
+    "mode": "On-site or remote",
     "location": "Tangier, Morocco"
   },
   "footer": {

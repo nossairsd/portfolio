@@ -8,7 +8,7 @@ import dots from "../globe-dots.json";
 import { clamp01, smoothstep, useProgressFrame } from "../webgl";
 
 const DEG = Math.PI / 180;
-const DESTINATIONS: CityId[] = ["paris", "lyon", "brussels", "geneva", "luxembourg", "amsterdam"];
+const DESTINATIONS: CityId[] = ["paris", "london", "berlin", "dubai", "montreal", "remote"];
 const LIST = dots as number[];
 const BLUE = "#2563eb";
 
