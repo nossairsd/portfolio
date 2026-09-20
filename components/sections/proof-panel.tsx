@@ -3,7 +3,7 @@
 import NumberFlow from "@number-flow/react";
 import { CalendarRange, FlaskConical, Smartphone, Timer, type LucideIcon } from "lucide-react";
 import { motion, useInView, useMotionValue, useMotionValueEvent, useTransform, type MotionValue } from "motion/react";
-import { useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 import { easeOut, segment, useHeroSequence } from "./hero-sequence";
 
@@ -200,9 +200,97 @@ function RealtimeViz({ active }: { active: boolean }) {
 /*  Card                                                                      */
 /* -------------------------------------------------------------------------- */
 
-function BigNumber({ stat, active, locale }: { stat: ProofStat; active: boolean; locale: string }) {
+/**
+ * How much of a card actually fits.
+ *
+ * The panel is one screen tall, so a card's height changes with the window and
+ * with the browser's zoom. Instead of guessing a breakpoint, the card measures
+ * itself: while its content is taller than its box, it drops one layer — the
+ * supporting line first, then the chart — until what is left fits exactly.
+ * When the window changes, it tries the full version again.
+ */
+type Room = { roomy: boolean; tall: boolean };
+const RoomContext = createContext<Room>({ roomy: true, tall: true });
+
+const LEVELS: Room[] = [
+  { roomy: false, tall: false },
+  { roomy: true, tall: false },
+  { roomy: true, tall: true },
+];
+
+function useRoom(element: React.RefObject<HTMLElement | null>): Room {
+  const [level, setLevel] = useState(2);
+
+  useEffect(() => {
+    const node = element.current;
+    if (!node) return;
+    let current = 2;
+    let frame = 0;
+
+    // One layer per frame, until what is left fits the box exactly.
+    const trim = () => {
+      frame = requestAnimationFrame(() => {
+        if (current > 0 && node.scrollHeight > node.clientHeight + 1) {
+          current -= 1;
+          setLevel(current);
+          trim();
+        }
+      });
+    };
+    const restart = () => {
+      current = 2;
+      setLevel(2);
+      trim();
+    };
+
+    // Only the panel resizing means the card has a different amount of room.
+    const observer = new ResizeObserver(restart);
+    observer.observe(node.parentElement ?? node);
+    restart();
+
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+    };
+  }, [element]);
+
+  return LEVELS[level];
+}
+
+/** Shown only when its card has the room for it. */
+function Fits({ need = "roomy", children }: { need?: keyof Room; children: React.ReactNode }) {
+  const room = useContext(RoomContext);
+  return room[need] ? <>{children}</> : null;
+}
+
+function AuditFigure({ value, active, locale, label }: { value: number; active: boolean; locale: string; label: string }) {
+  const room = useContext(RoomContext);
   return (
-    <p className="flex items-baseline text-[clamp(2.125rem,4.6vw,4.5rem)] font-medium leading-none tracking-[-0.05em] text-fg">
+    <>
+      <p
+        className={cn(
+          "flex items-baseline font-medium leading-none tracking-[-0.05em] text-fg",
+          room.tall ? "text-[clamp(1.75rem,3vw,2.75rem)]" : "text-[clamp(1.5rem,2.6vw,2.25rem)]",
+        )}
+      >
+        <span className="text-subtle">−</span>
+        <NumberFlow value={active ? value : 0} locales={locale} className="tabular-nums" transformTiming={{ duration: 1200, easing: EASE }} />
+        <span className="ml-1 text-[0.5em] tracking-[-0.02em] text-primary">%</span>
+      </p>
+      <p className="mt-1 truncate text-[0.8125rem] leading-snug text-muted">{label}</p>
+    </>
+  );
+}
+
+function BigNumber({ stat, active, locale }: { stat: ProofStat; active: boolean; locale: string }) {
+  const room = useContext(RoomContext);
+  return (
+    <p
+      className={cn(
+        "flex items-baseline font-medium leading-none tracking-[-0.05em] text-fg",
+        room.tall ? "text-[clamp(2.125rem,4.6vw,4.5rem)]" : "text-[clamp(1.75rem,3.4vw,2.75rem)]",
+      )}
+    >
       {stat.prefix ? <span className="text-subtle">{stat.prefix}</span> : null}
       <NumberFlow
         value={active ? stat.value : 0}
@@ -237,12 +325,15 @@ function Card({
   children: React.ReactNode;
 }) {
   const Icon = ICONS[stat.kind];
+  const box = useRef<HTMLLIElement>(null);
+  const room = useRoom(box);
   // While the card is a miniature, its tiles sit slightly apart and settle as
   // it zooms in: depth without hiding anything.
   const y = useTransform(progress, (p) => (1 - easeOut(segment(p, 0.25, 0.8))) * (14 + index * 10));
 
   return (
     <motion.li
+      ref={box}
       className={cn(
         "relative flex min-h-0 min-w-0 flex-col overflow-hidden rounded-[1.25rem] bg-white p-4 ring-1 ring-fg/[0.06] shadow-[0_1px_2px_rgb(15_23_42/0.04),0_12px_32px_-16px_rgb(15_23_42/0.18)] sm:p-5 lg:p-6",
         className,
@@ -273,7 +364,7 @@ function Card({
           {stat.tag}
         </span>
       </div>
-      {children}
+      <RoomContext.Provider value={room}>{children}</RoomContext.Provider>
     </motion.li>
   );
 }
@@ -342,72 +433,78 @@ export function ProofPanel({ labels, stats, locale }: { labels: ProofLabels; sta
             pinned ? "min-h-0 flex-1 lg:max-h-[38rem]" : "lg:h-[34rem]",
           )}
         >
-          {/* Months: tall card with the bar chart */}
+          {/* Months: the role, month by month. */}
           <Card key={`months-${pinned}`} stat={months} index={0} active={active} progress={progress} pinned={pinned} className="col-span-2 lg:col-span-4 lg:row-span-2">
             <div className="mt-3 flex items-end justify-between gap-4 sm:mt-5 lg:block">
               <div>
                 <BigNumber stat={months} active={active} locale={locale} />
                 <p className="mt-2 max-w-[15rem] text-[0.8125rem] leading-snug text-muted sm:text-sm lg:mt-3">{months.label}</p>
               </div>
-              <p className="shrink-0 font-mono text-[0.625rem] uppercase tracking-wider text-subtle lg:mt-3">{labels.since}</p>
+              <Fits need="tall">
+                <p className="shrink-0 font-mono text-[0.625rem] uppercase tracking-wider text-subtle lg:mt-3">{labels.since}</p>
+              </Fits>
             </div>
-            <div className="mt-3 h-14 sm:mt-4 lg:mt-auto lg:h-auto lg:min-h-0 lg:flex-1 lg:pt-6">
-              <MonthsViz value={months.value} active={active} />
-            </div>
+            <Fits>
+              <div className="mt-2.5 h-10 min-h-0 sm:mt-4 sm:h-14 lg:mt-auto lg:h-auto lg:flex-1 lg:pt-6">
+                <MonthsViz value={months.value} active={active} />
+              </div>
+            </Fits>
           </Card>
 
           {/* The audit platform: both of its figures, side by side. */}
           <Card key={`audit-${pinned}`} stat={audit} index={1} active={active} progress={progress} pinned={pinned} className="col-span-2 lg:col-span-8">
-            <div className="mt-2 sm:mt-2.5">
-              <p className="text-[0.9375rem] font-semibold tracking-[-0.01em] text-fg">{labels.auditTitle}</p>
-              <p className="mt-1 line-clamp-1 max-w-xl text-[0.8125rem] leading-snug text-muted max-sm:hidden">{labels.auditLead}</p>
+            <div className="mt-2 min-w-0 sm:mt-2.5">
+              <p className="truncate text-[0.9375rem] font-semibold tracking-[-0.01em] text-fg">{labels.auditTitle}</p>
+              <Fits need="tall">
+                <p className="mt-1 line-clamp-1 max-w-xl text-[0.8125rem] leading-snug text-muted max-sm:hidden">{labels.auditLead}</p>
+              </Fits>
             </div>
-            <div className="mt-2 grid flex-1 content-center gap-3 sm:mt-3 sm:grid-cols-2 sm:gap-8">
-              <div>
-                <p className="flex items-baseline text-[clamp(1.75rem,3vw,2.75rem)] font-medium leading-none tracking-[-0.05em] text-fg">
-                  <span className="text-subtle">−</span>
-                  <NumberFlow value={active ? 65 : 0} locales={locale} className="tabular-nums" />
-                  <span className="ml-1 text-[0.5em] tracking-[-0.02em] text-primary">%</span>
-                </p>
-                <p className="mt-1 text-[0.8125rem] leading-snug text-muted">{labels.auditDelay}</p>
-                <div className="mt-2.5">
-                  <DelayViz value={65} active={active} before={labels.before} after={labels.after} caption={labels.delayCaption} />
-                </div>
+            <div className="mt-2 grid min-h-0 flex-1 content-center gap-3 sm:mt-3 sm:grid-cols-2 sm:gap-8">
+              <div className="min-w-0">
+                <AuditFigure value={65} active={active} locale={locale} label={labels.auditDelay} />
+                <Fits>
+                  <div className="mt-2.5">
+                    <DelayViz value={65} active={active} before={labels.before} after={labels.after} caption={labels.delayCaption} />
+                  </div>
+                </Fits>
               </div>
-              <div>
-                <p className="flex items-baseline text-[clamp(1.75rem,3vw,2.75rem)] font-medium leading-none tracking-[-0.05em] text-fg">
-                  <span className="text-subtle">−</span>
-                  <NumberFlow value={active ? 80 : 0} locales={locale} className="tabular-nums" />
-                  <span className="ml-1 text-[0.5em] tracking-[-0.02em] text-primary">%</span>
-                </p>
-                <p className="mt-1 text-[0.8125rem] leading-snug text-muted">{labels.auditErrors}</p>
-                <div className="mt-2.5">
-                  <ErrorsViz value={80} active={active} />
-                </div>
+              <div className="min-w-0">
+                <AuditFigure value={80} active={active} locale={locale} label={labels.auditErrors} />
+                <Fits>
+                  <div className="mt-2.5">
+                    <ErrorsViz value={80} active={active} />
+                  </div>
+                </Fits>
               </div>
             </div>
           </Card>
 
           <Card key={`tests-${pinned}`} stat={tests} index={2} active={active} progress={progress} pinned={pinned} compact className="lg:col-span-4">
-            <div className="mt-3 sm:mt-4">
+            <div className="mt-3 min-w-0 sm:mt-4">
               <BigNumber stat={tests} active={active} locale={locale} />
               <p className="mt-2 text-[0.8125rem] leading-snug text-muted sm:text-sm">{tests.label}</p>
             </div>
-            <div className="mt-auto pt-3 sm:pt-4">
-              <TestsViz active={active} total={tests.value} />
-            </div>
+            <Fits>
+              <div className="mt-auto min-h-0 pt-3 sm:pt-4">
+                <TestsViz active={active} total={tests.value} />
+              </div>
+            </Fits>
           </Card>
 
           {/* The mobile app before that: the third place the work was done. */}
           <Card key={`mobile-${pinned}`} stat={mobile} index={3} active={active} progress={progress} pinned={pinned} compact className="lg:col-span-4">
-            <div className="mt-3 sm:mt-4">
+            <div className="mt-3 min-w-0 sm:mt-4">
               <BigNumber stat={mobile} active={active} locale={locale} />
               <p className="mt-2 text-[0.8125rem] leading-snug text-muted sm:text-sm">{mobile.label}</p>
             </div>
-            <div className="mt-auto pt-3 sm:pt-4">
-              <p className="mb-2 font-mono text-[0.625rem] uppercase tracking-wider text-subtle max-sm:hidden">{labels.realtime}</p>
-              <RealtimeViz active={active} />
-            </div>
+            <Fits>
+              <div className="mt-auto min-h-0 pt-3 sm:pt-4">
+                <Fits need="tall">
+                  <p className="mb-2 truncate font-mono text-[0.625rem] uppercase tracking-wider text-subtle max-sm:hidden">{labels.realtime}</p>
+                </Fits>
+                <RealtimeViz active={active} />
+              </div>
+            </Fits>
           </Card>
         </ul>
       </div>
