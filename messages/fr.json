@@ -415,26 +415,33 @@
         "items": ["Azure", "Docker", "GitHub Actions", "Linux"]
       }
     ],
+    "transversalIntro": "Cinq familles d'outils qui ne vivent pas dans une seule couche : elles traversent tout le système.",
+    "transversalCaption": "Les cinq familles, autour des quatre couches",
     "transversalTitle": "Transverse à toutes les couches",
     "transversal": [
       {
         "name": "Langages",
+        "role": "Les langages que j'écris au quotidien, côté web comme côté JVM.",
         "items": ["TypeScript", "JavaScript", "Java", "Python", "SQL"]
       },
       {
         "name": "Tests & qualité",
+        "role": "Tests unitaires, d'intégration et de bout en bout, écrits avant le code quand c'est possible.",
         "items": ["JUnit 5", "Mockito", "Vitest", "Playwright", "Supertest", "TDD"]
       },
       {
         "name": "Sécurité",
+        "role": "Authentification, jetons et droits d'accès sur chaque route exposée.",
         "items": ["JWT", "OAuth 2.0", "Spring Security"]
       },
       {
         "name": "Intégration & IA",
+        "role": "Le produit branché aux outils de l'entreprise et aux services d'IA.",
         "items": ["Microsoft Graph", "Copilot Studio", "SAP"]
       },
       {
         "name": "Architecture & méthodes",
+        "role": "Un code qu'une autre équipe peut reprendre : frontières nettes, revues, itérations courtes.",
         "items": ["Clean Architecture", "SOLID", "Design patterns", "Agile / Scrum", "Revues de code"]
       }
     ]
@@ -511,6 +518,7 @@
     "location": "Tanger, Maroc"
   },
   "footer": {
+    "cta": "Prochaine étape",
     "tagline": "Software Engineer Full-Stack. Applications métier, de l'API à la production.",
     "credit": "Conçu et développé par Nossair Sedki.",
     "top": "Haut de page",

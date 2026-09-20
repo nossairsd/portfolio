@@ -25,10 +25,14 @@ export function SceneCanvas() {
 const PipelineScene = dynamic(() => import("./pipeline-scene"), { ssr: false });
 const LaptopScene = dynamic(() => import("./laptop-scene"), { ssr: false });
 const GlobeScene = dynamic(() => import("./globe-scene"), { ssr: false });
+const ShellScene = dynamic(() => import("./shell-scene"), { ssr: false });
+const HorizonScene = dynamic(() => import("./horizon-scene"), { ssr: false });
 
 const PipelineFallback = dynamic(() => import("./fallbacks/pipeline-fallback"), { ssr: false });
 const LaptopFallback = dynamic(() => import("./fallbacks/laptop-fallback"), { ssr: false });
 const GlobeFallback = dynamic(() => import("./fallbacks/globe-fallback"), { ssr: false });
+const ShellFallback = dynamic(() => import("./fallbacks/shell-fallback"), { ssr: false });
+const HorizonFallback = dynamic(() => import("./fallbacks/horizon-fallback"), { ssr: false });
 
 /** The view's box is always in the page; what draws inside it arrives when needed. */
 function Deferred({ id, className, children }: { id: string; className?: string; children: React.ReactNode }) {
@@ -64,6 +68,28 @@ export function GlobeView({ className, ...props }: ComponentProps<typeof GlobeSc
   return (
     <Deferred id="globe" className={className}>
       {webgl === null ? null : webgl ? <GlobeScene {...props} className="absolute inset-0" /> : <GlobeFallback {...props} className="absolute inset-0" />}
+    </Deferred>
+  );
+}
+
+export function ShellView({ className, ...props }: ComponentProps<typeof ShellScene>) {
+  const webgl = useWebGL();
+  return (
+    <Deferred id="shell" className={className}>
+      {webgl === null ? null : webgl ? (
+        <ShellScene {...props} className="absolute inset-0" />
+      ) : (
+        <ShellFallback groups={props.groups} layers={props.layers} active={props.active} className="absolute inset-0" />
+      )}
+    </Deferred>
+  );
+}
+
+export function HorizonView({ className }: { className?: string }) {
+  const webgl = useWebGL();
+  return (
+    <Deferred id="horizon" className={className}>
+      {webgl === null ? null : webgl ? <HorizonScene className="absolute inset-0" /> : <HorizonFallback className="absolute inset-0" />}
     </Deferred>
   );
 }

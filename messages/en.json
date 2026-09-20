@@ -415,26 +415,33 @@
         "items": ["Azure", "Docker", "GitHub Actions", "Linux"]
       }
     ],
+    "transversalIntro": "Five families of tools that do not live in one layer: they run through the whole system.",
+    "transversalCaption": "The five families, around the four layers",
     "transversalTitle": "Across every layer",
     "transversal": [
       {
         "name": "Languages",
+        "role": "The languages I write every day, on the web and on the JVM.",
         "items": ["TypeScript", "JavaScript", "Java", "Python", "SQL"]
       },
       {
         "name": "Testing & quality",
+        "role": "Unit, integration and end-to-end tests, written before the code when it makes sense.",
         "items": ["JUnit 5", "Mockito", "Vitest", "Playwright", "Supertest", "TDD"]
       },
       {
         "name": "Security",
+        "role": "Authentication, tokens and access rules on every exposed route.",
         "items": ["JWT", "OAuth 2.0", "Spring Security"]
       },
       {
         "name": "Integration & AI",
+        "role": "The product wired into company tools and AI services.",
         "items": ["Microsoft Graph", "Copilot Studio", "SAP"]
       },
       {
         "name": "Architecture & methods",
+        "role": "Code another team can pick up: clear boundaries, reviews, short iterations.",
         "items": ["Clean Architecture", "SOLID", "Design patterns", "Agile / Scrum", "Code reviews"]
       }
     ]
@@ -511,6 +518,7 @@
     "location": "Tangier, Morocco"
   },
   "footer": {
+    "cta": "Next step",
     "tagline": "Full-Stack Software Engineer. Business applications, from API to production.",
     "credit": "Designed and built by Nossair Sedki.",
     "top": "Back to top",

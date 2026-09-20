@@ -14,7 +14,8 @@ export async function Education() {
   const certifications = t.raw("certifications") as Certification[];
 
   return (
-    <section id="education" className="section-y relative scroll-mt-24">
+    // Rides over the blueprint sheet of the stack as that one closes.
+    <section id="education" className="section-y relative z-10 -mt-[7svh] scroll-mt-24 rounded-t-[2.5rem] bg-bg pt-[calc(6rem+7svh)]">
       <div className="container-page">
         <SectionHeading index="06" eyebrow={t("eyebrow")} lead={t("titleLead")} quiet={t("titleQuiet")} />
 
